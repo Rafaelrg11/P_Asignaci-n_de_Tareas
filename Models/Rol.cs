@@ -10,6 +10,6 @@ namespace P_Asignación_de_Tareas.Models
         public int IdRol {  get; set; }
         public string nombre { get; set; }
         public virtual ICollection<Users> Users { get; set; } = new List<Users>();
-        public virtual ICollection<Operaciones> Rolope { get; set; } = new List<Operaciones>();
+        public virtual ICollection<Operations> Rolope { get; set; } = new List<Operations>();
     }
 }

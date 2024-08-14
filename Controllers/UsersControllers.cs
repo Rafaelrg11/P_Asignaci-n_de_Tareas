@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using P_Asignación_de_Tareas.Dto;
 using P_Asignación_de_Tareas.Models;
 using P_Asignación_de_Tareas.Operaciones;
 
@@ -18,5 +19,12 @@ namespace P_Asignación_de_Tareas.Controllers
             _dbcontext = dbcontext;
             _operations = operations;
         }
+
+        public async Task<IActionResult> Login([FromBody] UsersDto usersDto)
+        {
+
+        }
+
+
     }
 }
