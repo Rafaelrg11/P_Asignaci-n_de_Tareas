@@ -12,6 +12,6 @@ namespace P_Asignación_de_Tareas.Models
         public string descriptionTask { get; set; }
         public DateTime dateTask { get; set; }
         public DateTime dateTaskCompletion { get; set; }
-        public virtual Proyects proyects { get; set; }
+        public virtual ICollection<Proyects> Proyects { get; set; } = new List<Proyects>();
     }
 }

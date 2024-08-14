@@ -11,6 +11,7 @@ namespace P_Asignación_de_Tareas.Models
         public int password { get; set; }
         public string? emailUser { get; set; }
         public string? nameUser { get; set; }
+        public int IdRol { get; set; }
         public virtual ICollection<AuxiliarT> AuxiliarT { get; set; } = new List<AuxiliarT>();
     }
 }

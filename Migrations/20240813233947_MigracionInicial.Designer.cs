@@ -12,8 +12,8 @@ using P_Asignación_de_Tareas.Models;
 namespace P_Asignación_de_Tareas.Migrations
 {
     [DbContext(typeof(ApplicationDbcontext))]
-    [Migration("20240812175136_InitDB")]
-    partial class InitDB
+    [Migration("20240813233947_MigracionInicial")]
+    partial class MigracionInicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,6 +87,23 @@ namespace P_Asignación_de_Tareas.Migrations
                     b.ToTable("comments", (string)null);
                 });
 
+            modelBuilder.Entity("P_Asignación_de_Tareas.Models.Module", b =>
+                {
+                    b.Property<int>("IdMod")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdMod"));
+
+                    b.Property<string>("NameMod")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("IdMod");
+
+                    b.ToTable("module", (string)null);
+                });
+
             modelBuilder.Entity("P_Asignación_de_Tareas.Models.Notifications", b =>
                 {
                     b.Property<int>("idNotification")
@@ -108,6 +125,60 @@ namespace P_Asignación_de_Tareas.Migrations
                     b.ToTable("notifications", (string)null);
                 });
 
+            modelBuilder.Entity("P_Asignación_de_Tareas.Models.Operaciones", b =>
+                {
+                    b.Property<int>("IdRolpOperation")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdRolpOperation"));
+
+                    b.Property<int>("IdOperaciones")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IdRol")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("Operations_RolIdOperationsRol")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("RolIdRol")
+                        .HasColumnType("integer");
+
+                    b.HasKey("IdRolpOperation");
+
+                    b.HasIndex("Operations_RolIdOperationsRol");
+
+                    b.HasIndex("RolIdRol");
+
+                    b.ToTable("operaciones", (string)null);
+                });
+
+            modelBuilder.Entity("P_Asignación_de_Tareas.Models.Operations_Rol", b =>
+                {
+                    b.Property<int>("IdOperationsRol")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdOperationsRol"));
+
+                    b.Property<int>("IdModulo")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ModuleIdMod")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("NameOperationRol")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("IdOperationsRol");
+
+                    b.HasIndex("ModuleIdMod");
+
+                    b.ToTable("operation_rol", (string)null);
+                });
+
             modelBuilder.Entity("P_Asignación_de_Tareas.Models.Proyects", b =>
                 {
                     b.Property<int>("idProyect")
@@ -115,6 +186,9 @@ namespace P_Asignación_de_Tareas.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("idProyect"));
+
+                    b.Property<int?>("TasksidTask")
+                        .HasColumnType("integer");
 
                     b.Property<int>("idTasks")
                         .HasColumnType("integer");
@@ -125,7 +199,26 @@ namespace P_Asignación_de_Tareas.Migrations
 
                     b.HasKey("idProyect");
 
+                    b.HasIndex("TasksidTask");
+
                     b.ToTable("proyects", (string)null);
+                });
+
+            modelBuilder.Entity("P_Asignación_de_Tareas.Models.Rol", b =>
+                {
+                    b.Property<int>("IdRol")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdRol"));
+
+                    b.Property<string>("nombre")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("IdRol");
+
+                    b.ToTable("rol", (string)null);
                 });
 
             modelBuilder.Entity("P_Asignación_de_Tareas.Models.Tasks", b =>
@@ -150,12 +243,7 @@ namespace P_Asignación_de_Tareas.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("proyectsidProyect")
-                        .HasColumnType("integer");
-
                     b.HasKey("idTask");
-
-                    b.HasIndex("proyectsidProyect");
 
                     b.ToTable("tasks", (string)null);
                 });
@@ -168,6 +256,12 @@ namespace P_Asignación_de_Tareas.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("idUser"));
 
+                    b.Property<int>("IdRol")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("RolIdRol")
+                        .HasColumnType("integer");
+
                     b.Property<string>("emailUser")
                         .HasColumnType("text");
 
@@ -178,6 +272,8 @@ namespace P_Asignación_de_Tareas.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("idUser");
+
+                    b.HasIndex("RolIdRol");
 
                     b.ToTable("users", (string)null);
                 });
@@ -201,15 +297,36 @@ namespace P_Asignación_de_Tareas.Migrations
                         .HasForeignKey("UsersidUser");
                 });
 
-            modelBuilder.Entity("P_Asignación_de_Tareas.Models.Tasks", b =>
+            modelBuilder.Entity("P_Asignación_de_Tareas.Models.Operaciones", b =>
                 {
-                    b.HasOne("P_Asignación_de_Tareas.Models.Proyects", "proyects")
-                        .WithMany("Tasks")
-                        .HasForeignKey("proyectsidProyect")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("P_Asignación_de_Tareas.Models.Operations_Rol", null)
+                        .WithMany("Operaciones")
+                        .HasForeignKey("Operations_RolIdOperationsRol");
 
-                    b.Navigation("proyects");
+                    b.HasOne("P_Asignación_de_Tareas.Models.Rol", null)
+                        .WithMany("Rolope")
+                        .HasForeignKey("RolIdRol");
+                });
+
+            modelBuilder.Entity("P_Asignación_de_Tareas.Models.Operations_Rol", b =>
+                {
+                    b.HasOne("P_Asignación_de_Tareas.Models.Module", null)
+                        .WithMany("OperationsRol")
+                        .HasForeignKey("ModuleIdMod");
+                });
+
+            modelBuilder.Entity("P_Asignación_de_Tareas.Models.Proyects", b =>
+                {
+                    b.HasOne("P_Asignación_de_Tareas.Models.Tasks", null)
+                        .WithMany("Proyects")
+                        .HasForeignKey("TasksidTask");
+                });
+
+            modelBuilder.Entity("P_Asignación_de_Tareas.Models.Users", b =>
+                {
+                    b.HasOne("P_Asignación_de_Tareas.Models.Rol", null)
+                        .WithMany("Users")
+                        .HasForeignKey("RolIdRol");
                 });
 
             modelBuilder.Entity("P_Asignación_de_Tareas.Models.Comments", b =>
@@ -217,16 +334,36 @@ namespace P_Asignación_de_Tareas.Migrations
                     b.Navigation("AuxiliarT");
                 });
 
+            modelBuilder.Entity("P_Asignación_de_Tareas.Models.Module", b =>
+                {
+                    b.Navigation("OperationsRol");
+                });
+
             modelBuilder.Entity("P_Asignación_de_Tareas.Models.Notifications", b =>
                 {
                     b.Navigation("AuxiliarT");
                 });
 
+            modelBuilder.Entity("P_Asignación_de_Tareas.Models.Operations_Rol", b =>
+                {
+                    b.Navigation("Operaciones");
+                });
+
             modelBuilder.Entity("P_Asignación_de_Tareas.Models.Proyects", b =>
                 {
                     b.Navigation("AuxiliarT");
+                });
 
-                    b.Navigation("Tasks");
+            modelBuilder.Entity("P_Asignación_de_Tareas.Models.Rol", b =>
+                {
+                    b.Navigation("Rolope");
+
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("P_Asignación_de_Tareas.Models.Tasks", b =>
+                {
+                    b.Navigation("Proyects");
                 });
 
             modelBuilder.Entity("P_Asignación_de_Tareas.Models.Users", b =>

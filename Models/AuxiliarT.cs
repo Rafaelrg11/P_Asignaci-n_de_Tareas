@@ -7,19 +7,10 @@ namespace P_Asignación_de_Tareas.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int idAuxiliar { get; set; }
-
-        [ForeignKey("idUser")]
+        public int idAuxiliar { get; set; }       
         public int idUser { get; set; }
-
-        [ForeignKey("idProyect")]
         public int idProyect { get; set; }
-
-        [ForeignKey("idCommet")]
         public int idCommet { get; set; }
-
-        [ForeignKey("idNotification")]
         public int idNotification { get; set; }
-           
     }
 }

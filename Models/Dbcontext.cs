@@ -15,6 +15,11 @@ namespace P_Asignación_de_Tareas.Models
         public virtual DbSet<Notifications> Notifications { get; set; }
         public virtual DbSet<Comments> Comments { get; set; }
         public virtual DbSet<AuxiliarT> AuxiliarTs { get; set; }
+        public virtual DbSet<Rol> Rols { get; set; }
+        public virtual DbSet<Operaciones> RolOperations { get; set; }
+        public virtual DbSet<Operations_Rol> OperationRols { get; set; }
+        public virtual DbSet<Module> Modules { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -25,6 +30,10 @@ namespace P_Asignación_de_Tareas.Models
             modelBuilder.Entity<Notifications>().ToTable("notifications");
             modelBuilder.Entity<Comments>().ToTable("comments");
             modelBuilder.Entity<AuxiliarT>().ToTable("auxiliarT");
+            modelBuilder.Entity<Rol>().ToTable("rol");
+            modelBuilder.Entity<Operaciones>().ToTable("operaciones");
+            modelBuilder.Entity<Operations_Rol>().ToTable("operation_rol");
+            modelBuilder.Entity<Module>().ToTable("module");
         }
     }
 }
