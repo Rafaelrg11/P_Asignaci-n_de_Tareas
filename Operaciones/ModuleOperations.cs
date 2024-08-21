@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using P_Asignación_de_Tareas.Dto;
 using P_Asignación_de_Tareas.Models;
 
@@ -50,7 +51,7 @@ namespace P_Asignación_de_Tareas.Operaciones
         public async Task<bool> DeleteModule(int idModule)
         {
             var result = await _context.Modules.FindAsync(idModule);
-            if (result != null)
+            if (result == null)
             {
                 return false;
             }

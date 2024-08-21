@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace P_Asignación_de_Tareas.Models
 {
-    public class Operations
+    public class Operaciones
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

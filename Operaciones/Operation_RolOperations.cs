@@ -50,7 +50,7 @@ namespace P_Asignación_de_Tareas.Operaciones
         public async Task<bool> DeleteOperationRol(int idoperation)
         {
             var result = await _context.OperationRols.FindAsync(idoperation);
-            if (result != null)
+            if (result == null)
             {
                 return false;
             }

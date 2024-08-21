@@ -63,7 +63,7 @@ namespace P_Asignación_de_Tareas.Operaciones
         public async Task<bool> DeleteUser(int iduser)
         {
             var result = await _dbcontext.Users.FindAsync(iduser);
-            if (result != null)
+            if (result == null)
             {
                 return false;
             }

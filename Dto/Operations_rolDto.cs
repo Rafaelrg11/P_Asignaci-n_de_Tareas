@@ -4,5 +4,6 @@
     {
         public int IdOperationsRol { get; set; }
         public string NameOperationRol { get; set; }
+        public int IdModulo { get; set; }
     }
 }

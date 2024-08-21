@@ -10,6 +10,6 @@ namespace P_Asignación_de_Tareas.Models
         public int IdOperationsRol { get; set; }
         public string NameOperationRol { get; set; }
         public int IdModulo { get; set; }
-        public virtual ICollection<Operations> Operaciones { get; set; } = new List<Operations>();
+        public virtual ICollection<Operaciones> Operaciones { get; set; } = new List<Operaciones>();
     }
 }

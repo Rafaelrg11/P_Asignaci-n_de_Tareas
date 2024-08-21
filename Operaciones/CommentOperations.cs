@@ -50,7 +50,7 @@ namespace P_Asignación_de_Tareas.Operaciones
         public async Task<bool> DeleteComment(int idComment)
         {
             var result = await _context.Comments.FindAsync(idComment);
-            if (result != null)
+            if (result == null)
             {
                 return false;
             }

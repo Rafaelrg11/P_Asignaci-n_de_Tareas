@@ -94,11 +94,11 @@ namespace P_Asignación_de_Tareas.Migrations
                 {
                     table.PrimaryKey("PK_operation_rol", x => x.IdOperationsRol);
                     table.ForeignKey(
-                        name: "FK_operation_rol_module_ModuleIdMod",
+                        name: "FK_operation_rol_module",
                         column: x => x.IdModulo,
                         principalTable: "module",
                         principalColumn: "IdMod");
-                });
+                }); 
 
             migrationBuilder.CreateTable(
                 name: "users",

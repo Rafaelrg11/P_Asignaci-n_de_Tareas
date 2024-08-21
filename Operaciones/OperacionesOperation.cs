@@ -11,21 +11,21 @@ namespace P_Asignación_de_Tareas.Operaciones
         {
             _context = dbcontext;
         }
-        public async Task<List<Operations>> GetOperaciones()
+        public async Task<List<Models.Operaciones>> GetOperaciones()
         {
             var result = await _context.Operations.AsNoTracking().ToListAsync();    
             
             return result;
         }
 
-        public async Task<Operations> GetOperation(int idOperation)
+        public async Task<Models.Operaciones> GetOperation(int idOperation)
         {
             var result = await _context.Operations.FindAsync(idOperation);
 
             return result;
         }
 
-        public async Task<Operations> CreateOperations(Operations operations)
+        public async Task<Models.Operaciones> CreateOperations(Models.Operaciones operations)
         {
             var result =  await _context.Operations.AddAsync(operations);
 
@@ -34,9 +34,9 @@ namespace P_Asignación_de_Tareas.Operaciones
             return operations;
         }
 
-        public async Task<bool> UpdateOperation(OperationsDto operations)
+        public async Task<bool> UpdateOperation(OperacionesDto operations)
         {
-            Operations? ope = await _context.Operations.FindAsync(operations);
+            Models.Operaciones? ope = await _context.Operations.FindAsync(operations);
             if (ope != null) 
             {
                 ope.IdOperaciones = operations.IdOperaciones;
@@ -47,10 +47,10 @@ namespace P_Asignación_de_Tareas.Operaciones
             return true;
         }
 
-        public async Task<bool> DeleteOperaion(INamedRouter idOperation)
+        public async Task<bool> DeleteOperaion(int idOperation)
         {
             var result = await _context.Operations.FindAsync(idOperation);
-            if (result != null) 
+            if (result == null) 
             {
                 return false;
             }

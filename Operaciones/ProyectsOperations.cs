@@ -52,7 +52,7 @@ namespace P_Asignación_de_Tareas.Operaciones
         public async Task<bool> DeleteProyect(int idproyect)
         {
             var result = await _context.Proyects.FindAsync(idproyect);
-            if (result != null)
+            if (result == null)
             {
                 return false;
             }

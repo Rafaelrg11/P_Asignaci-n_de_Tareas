@@ -55,7 +55,7 @@ namespace P_Asignación_de_Tareas.Operaciones
         public async Task<bool> DeleteTask(int idtask)
         {
             var result = await _dbcontext.Tasks.FindAsync(idtask);
-            if (result != null)
+            if (result == null)
             {
                 return false;
             }

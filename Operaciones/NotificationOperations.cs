@@ -50,7 +50,7 @@ namespace P_Asignación_de_Tareas.Operaciones
         public async Task<bool> DeleteNotification(int idNotification)
         {
             var result = await _context.Notifications.FindAsync(idNotification);
-            if (result != null)
+            if (result == null)
             {
                 return false;
             }
