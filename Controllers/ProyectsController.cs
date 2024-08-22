@@ -35,6 +35,7 @@ namespace P_Asignación_de_Tareas.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Master")]
         [HttpPost("CreateProyect")]
         public async Task<IActionResult> CreateProyect(ProyectsDto proyectsDto)
         {

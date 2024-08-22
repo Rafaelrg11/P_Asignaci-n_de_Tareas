@@ -12,8 +12,8 @@ using P_Asignación_de_Tareas.Models;
 namespace P_Asignación_de_Tareas.Migrations
 {
     [DbContext(typeof(ApplicationDbcontext))]
-    [Migration("20240813233947_MigracionInicial")]
-    partial class MigracionInicial
+    [Migration("20240821215516_firstmigration")]
+    partial class firstmigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,18 +33,6 @@ namespace P_Asignación_de_Tareas.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("idAuxiliar"));
 
-                    b.Property<int?>("CommentsidComment")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("NotificationsidNotification")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("ProyectsidProyect")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("UsersidUser")
-                        .HasColumnType("integer");
-
                     b.Property<int>("idCommet")
                         .HasColumnType("integer");
 
@@ -57,15 +45,16 @@ namespace P_Asignación_de_Tareas.Migrations
                     b.Property<int>("idUser")
                         .HasColumnType("integer");
 
-                    b.HasKey("idAuxiliar");
+                    b.HasKey("idAuxiliar")
+                        .HasName("PK_Auxiliar");
 
-                    b.HasIndex("CommentsidComment");
+                    b.HasIndex("idCommet");
 
-                    b.HasIndex("NotificationsidNotification");
+                    b.HasIndex("idNotification");
 
-                    b.HasIndex("ProyectsidProyect");
+                    b.HasIndex("idProyect");
 
-                    b.HasIndex("UsersidUser");
+                    b.HasIndex("idUser");
 
                     b.ToTable("auxiliarT", (string)null);
                 });
@@ -74,15 +63,18 @@ namespace P_Asignación_de_Tareas.Migrations
                 {
                     b.Property<int>("idComment")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("idComment");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("idComment"));
 
                     b.Property<string>("descriptionCommet")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("character varying")
+                        .HasColumnName("descriptionCommet");
 
-                    b.HasKey("idComment");
+                    b.HasKey("idComment")
+                        .HasName("PK_Comment");
 
                     b.ToTable("comments", (string)null);
                 });
@@ -97,9 +89,11 @@ namespace P_Asignación_de_Tareas.Migrations
 
                     b.Property<string>("NameMod")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("character varying")
+                        .HasColumnName("nameModule");
 
-                    b.HasKey("IdMod");
+                    b.HasKey("IdMod")
+                        .HasName("PK_Module");
 
                     b.ToTable("module", (string)null);
                 });
@@ -108,48 +102,47 @@ namespace P_Asignación_de_Tareas.Migrations
                 {
                     b.Property<int>("idNotification")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("idNotification");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("idNotification"));
 
                     b.Property<string>("descriptionNotification")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("descriptionNotification");
 
                     b.Property<string>("nameNotification")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("character varying")
+                        .HasColumnName("nameNotification");
 
-                    b.HasKey("idNotification");
+                    b.HasKey("idNotification")
+                        .HasName("PK_Notification");
 
                     b.ToTable("notifications", (string)null);
                 });
 
             modelBuilder.Entity("P_Asignación_de_Tareas.Models.Operaciones", b =>
                 {
-                    b.Property<int>("IdRolpOperation")
+                    b.Property<int>("IdOperaciones")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdRolpOperation"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdOperaciones"));
 
-                    b.Property<int>("IdOperaciones")
+                    b.Property<int>("IdOperationRol")
                         .HasColumnType("integer");
 
                     b.Property<int>("IdRol")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("Operations_RolIdOperationsRol")
-                        .HasColumnType("integer");
+                    b.HasKey("IdOperaciones")
+                        .HasName("PK_Operaciones");
 
-                    b.Property<int?>("RolIdRol")
-                        .HasColumnType("integer");
+                    b.HasIndex("IdOperationRol");
 
-                    b.HasKey("IdRolpOperation");
-
-                    b.HasIndex("Operations_RolIdOperationsRol");
-
-                    b.HasIndex("RolIdRol");
+                    b.HasIndex("IdRol");
 
                     b.ToTable("operaciones", (string)null);
                 });
@@ -165,16 +158,15 @@ namespace P_Asignación_de_Tareas.Migrations
                     b.Property<int>("IdModulo")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("ModuleIdMod")
-                        .HasColumnType("integer");
-
                     b.Property<string>("NameOperationRol")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("NameOperationRol");
 
-                    b.HasKey("IdOperationsRol");
+                    b.HasKey("IdOperationsRol")
+                        .HasName("PK_OperationRol");
 
-                    b.HasIndex("ModuleIdMod");
+                    b.HasIndex("IdModulo");
 
                     b.ToTable("operation_rol", (string)null);
                 });
@@ -183,23 +175,23 @@ namespace P_Asignación_de_Tareas.Migrations
                 {
                     b.Property<int>("idProyect")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("idProyect");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("idProyect"));
-
-                    b.Property<int?>("TasksidTask")
-                        .HasColumnType("integer");
 
                     b.Property<int>("idTasks")
                         .HasColumnType("integer");
 
                     b.Property<string>("nameProyect")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("character varying")
+                        .HasColumnName("nameProyect");
 
-                    b.HasKey("idProyect");
+                    b.HasKey("idProyect")
+                        .HasName("PK_proyects");
 
-                    b.HasIndex("TasksidTask");
+                    b.HasIndex("idTasks");
 
                     b.ToTable("proyects", (string)null);
                 });
@@ -208,15 +200,18 @@ namespace P_Asignación_de_Tareas.Migrations
                 {
                     b.Property<int>("IdRol")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("idRol");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdRol"));
 
                     b.Property<string>("nombre")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("character varying")
+                        .HasColumnName("nombre");
 
-                    b.HasKey("IdRol");
+                    b.HasKey("IdRol")
+                        .HasName("PK_Rol");
 
                     b.ToTable("rol", (string)null);
                 });
@@ -225,25 +220,31 @@ namespace P_Asignación_de_Tareas.Migrations
                 {
                     b.Property<int>("idTask")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("idTask");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("idTask"));
 
                     b.Property<DateTime>("dateTask")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("dateTask");
 
                     b.Property<DateTime>("dateTaskCompletion")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("dateTaskCompletion");
 
                     b.Property<string>("descriptionTask")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("character varying")
+                        .HasColumnName("descriptionTask");
 
                     b.Property<string>("nameTask")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("character varying")
+                        .HasColumnName("nameTask");
 
-                    b.HasKey("idTask");
+                    b.HasKey("idTask")
+                        .HasName("PK_Task");
 
                     b.ToTable("tasks", (string)null);
                 });
@@ -252,81 +253,128 @@ namespace P_Asignación_de_Tareas.Migrations
                 {
                     b.Property<int>("idUser")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("idUser");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("idUser"));
 
                     b.Property<int>("IdRol")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("RolIdRol")
-                        .HasColumnType("integer");
-
                     b.Property<string>("emailUser")
-                        .HasColumnType("text");
+                        .HasColumnType("character varying")
+                        .HasColumnName("emailUser");
 
                     b.Property<string>("nameUser")
-                        .HasColumnType("text");
+                        .HasColumnType("character varying")
+                        .HasColumnName("nameUser");
 
                     b.Property<int>("password")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("password");
 
-                    b.HasKey("idUser");
+                    b.HasKey("idUser")
+                        .HasName("PK_users");
 
-                    b.HasIndex("RolIdRol");
+                    b.HasIndex("IdRol");
 
                     b.ToTable("users", (string)null);
                 });
 
             modelBuilder.Entity("P_Asignación_de_Tareas.Models.AuxiliarT", b =>
                 {
-                    b.HasOne("P_Asignación_de_Tareas.Models.Comments", null)
+                    b.HasOne("P_Asignación_de_Tareas.Models.Comments", "Comment")
                         .WithMany("AuxiliarT")
-                        .HasForeignKey("CommentsidComment");
+                        .HasForeignKey("idCommet")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Auxiliart_Comment");
 
-                    b.HasOne("P_Asignación_de_Tareas.Models.Notifications", null)
+                    b.HasOne("P_Asignación_de_Tareas.Models.Notifications", "Notification")
                         .WithMany("AuxiliarT")
-                        .HasForeignKey("NotificationsidNotification");
+                        .HasForeignKey("idNotification")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Auxiliart_Notification");
 
-                    b.HasOne("P_Asignación_de_Tareas.Models.Proyects", null)
+                    b.HasOne("P_Asignación_de_Tareas.Models.Proyects", "Proyect")
                         .WithMany("AuxiliarT")
-                        .HasForeignKey("ProyectsidProyect");
+                        .HasForeignKey("idProyect")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Auxiliart_Proyect");
 
-                    b.HasOne("P_Asignación_de_Tareas.Models.Users", null)
+                    b.HasOne("P_Asignación_de_Tareas.Models.Users", "User")
                         .WithMany("AuxiliarT")
-                        .HasForeignKey("UsersidUser");
+                        .HasForeignKey("idUser")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Auxiliart_User");
+
+                    b.Navigation("Comment");
+
+                    b.Navigation("Notification");
+
+                    b.Navigation("Proyect");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("P_Asignación_de_Tareas.Models.Operaciones", b =>
                 {
-                    b.HasOne("P_Asignación_de_Tareas.Models.Operations_Rol", null)
+                    b.HasOne("P_Asignación_de_Tareas.Models.Operations_Rol", "Operations_Rol")
                         .WithMany("Operaciones")
-                        .HasForeignKey("Operations_RolIdOperationsRol");
+                        .HasForeignKey("IdOperationRol")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Operaciones_OperationRol");
 
-                    b.HasOne("P_Asignación_de_Tareas.Models.Rol", null)
-                        .WithMany("Rolope")
-                        .HasForeignKey("RolIdRol");
+                    b.HasOne("P_Asignación_de_Tareas.Models.Rol", "Rol")
+                        .WithMany("Operacion")
+                        .HasForeignKey("IdRol")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Operaciones_Rol");
+
+                    b.Navigation("Operations_Rol");
+
+                    b.Navigation("Rol");
                 });
 
             modelBuilder.Entity("P_Asignación_de_Tareas.Models.Operations_Rol", b =>
                 {
-                    b.HasOne("P_Asignación_de_Tareas.Models.Module", null)
+                    b.HasOne("P_Asignación_de_Tareas.Models.Module", "Module")
                         .WithMany("OperationsRol")
-                        .HasForeignKey("ModuleIdMod");
+                        .HasForeignKey("IdModulo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_OperationRol_Module");
+
+                    b.Navigation("Module");
                 });
 
             modelBuilder.Entity("P_Asignación_de_Tareas.Models.Proyects", b =>
                 {
-                    b.HasOne("P_Asignación_de_Tareas.Models.Tasks", null)
+                    b.HasOne("P_Asignación_de_Tareas.Models.Tasks", "Task")
                         .WithMany("Proyects")
-                        .HasForeignKey("TasksidTask");
+                        .HasForeignKey("idTasks")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_proyects_tasks_idTasks");
+
+                    b.Navigation("Task");
                 });
 
             modelBuilder.Entity("P_Asignación_de_Tareas.Models.Users", b =>
                 {
-                    b.HasOne("P_Asignación_de_Tareas.Models.Rol", null)
+                    b.HasOne("P_Asignación_de_Tareas.Models.Rol", "Rol")
                         .WithMany("Users")
-                        .HasForeignKey("RolIdRol");
+                        .HasForeignKey("IdRol")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_users_rol_RolIdRol");
+
+                    b.Navigation("Rol");
                 });
 
             modelBuilder.Entity("P_Asignación_de_Tareas.Models.Comments", b =>
@@ -356,7 +404,7 @@ namespace P_Asignación_de_Tareas.Migrations
 
             modelBuilder.Entity("P_Asignación_de_Tareas.Models.Rol", b =>
                 {
-                    b.Navigation("Rolope");
+                    b.Navigation("Operacion");
 
                     b.Navigation("Users");
                 });

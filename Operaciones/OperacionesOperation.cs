@@ -36,10 +36,10 @@ namespace P_Asignación_de_Tareas.Operaciones
 
         public async Task<bool> UpdateOperation(OperacionesDto operations)
         {
-            Models.Operaciones? ope = await _context.Operations.FindAsync(operations);
+            Models.Operaciones? ope = await _context.Operations.FindAsync(operations.IdOperaciones);
             if (ope != null) 
             {
-                ope.IdOperaciones = operations.IdOperaciones;
+                ope.IdOperationRol = operations.IdOperationRol;
                 ope.IdRol = operations.IdRol;
 
                 await _context.SaveChangesAsync();

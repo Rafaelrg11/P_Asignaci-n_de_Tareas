@@ -7,9 +7,10 @@ namespace P_Asignación_de_Tareas.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int IdRolpOperation { get; set; }
-        public int IdRol { get; set; }
         public int IdOperaciones { get; set; }
-        
+        public int IdRol { get; set; }
+        public int IdOperationRol { get; set; }
+        public virtual Rol Rol { get; set; }
+        public virtual Operations_Rol OperationsRol { get; set; }
     }
 }

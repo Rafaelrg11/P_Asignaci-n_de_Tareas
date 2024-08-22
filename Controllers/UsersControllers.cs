@@ -36,7 +36,7 @@ namespace P_Asignación_de_Tareas.Controllers
         {
             var users = (from d in _dbcontext.Users
                          where d.nameUser == usersDto.nameUser.Trim() && d.password == usersDto.password
-                         && d.emailUser == usersDto.emailUser.Trim() && d.idUser == usersDto.idUser
+                         && d.emailUser == usersDto.emailUser.Trim() 
                          select d).FirstOrDefault();
 
             if (users != null)
@@ -84,19 +84,21 @@ namespace P_Asignación_de_Tareas.Controllers
             return Ok(result);
         }
 
-        /* [HttpPost("CreateUser")]
+        [Authorize(Roles = "Creator")]
+        [HttpPost("CreateUser")]
         public async Task<IActionResult> CreateUser(UsersDto usersDto)
-           {
-               try
-               {
+        {   
+                Users users = new Users()
+                {
+                    nameUser = usersDto.nameUser,
+                    emailUser = usersDto.emailUser,
+                    password = usersDto.password,      
+                    IdRol = usersDto.IdRol
+                };
 
-               }
-               catch (Exception ex) 
-               {
-                   return BadRequest(ex.Message);
-               }
-        
-        */
-    
+                var operation = await _operations.CreateUser(users);
+
+                return Ok(operation);
+        }
     }
 }

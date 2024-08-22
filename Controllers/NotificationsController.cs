@@ -49,6 +49,20 @@ namespace P_Asignación_de_Tareas.Controllers
             return Ok(operations);
         }
 
+        [HttpPut("UpdateNotification/{idNotification}")]
+        public async Task<bool> UpdateNotification(NotificationsDto notificationsDto)
+        {
+            var result = await _operations.UpdateNotification(notificationsDto);
 
+            return result;
+        }
+
+        [HttpDelete("DeleteNotification/{idNotification}")]
+        public async Task<bool> DeleteNotification(int idNotification)
+        {
+            var result = await _operations.DeleteNotification(idNotification);
+
+            return result;
+        }
     }
 }

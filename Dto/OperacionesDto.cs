@@ -2,8 +2,8 @@
 {
     public class OperacionesDto
     {
-        public int IdRolpOperation { get; set; }
-        public int IdRol { get; set; }
         public int IdOperaciones { get; set; }
+        public int IdRol { get; set; }
+        public int IdOperationRol { get; set; }
     }
 }

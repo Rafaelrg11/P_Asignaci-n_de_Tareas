@@ -39,7 +39,7 @@ namespace P_Asignación_de_Tareas.Operaciones
 
         public async Task<bool> UpdateRol(RolDto rolDto)
         {
-            Rol? rol = await _context.Rols.FindAsync(rolDto);
+            Rol? rol = await _context.Rols.FindAsync(rolDto.IdRol);
             if (rol != null) 
             {
                 rol.nombre = rolDto.nombre;

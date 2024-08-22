@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace P_Asignación_de_Tareas.Migrations
 {
     /// <inheritdoc />
-    public partial class MigracionInicial : Migration
+    public partial class firstmigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,11 +18,11 @@ namespace P_Asignación_de_Tareas.Migrations
                 {
                     idComment = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    descriptionCommet = table.Column<string>(type: "text", nullable: false)
+                    descriptionCommet = table.Column<string>(type: "character varying", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_comments", x => x.idComment);
+                    table.PrimaryKey("PK_Comment", x => x.idComment);
                 });
 
             migrationBuilder.CreateTable(
@@ -31,11 +31,11 @@ namespace P_Asignación_de_Tareas.Migrations
                 {
                     IdMod = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    NameMod = table.Column<string>(type: "text", nullable: false)
+                    nameModule = table.Column<string>(type: "character varying", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_module", x => x.IdMod);
+                    table.PrimaryKey("PK_Module", x => x.IdMod);
                 });
 
             migrationBuilder.CreateTable(
@@ -44,25 +44,25 @@ namespace P_Asignación_de_Tareas.Migrations
                 {
                     idNotification = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    nameNotification = table.Column<string>(type: "text", nullable: false),
+                    nameNotification = table.Column<string>(type: "character varying", nullable: false),
                     descriptionNotification = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_notifications", x => x.idNotification);
+                    table.PrimaryKey("PK_Notification", x => x.idNotification);
                 });
 
             migrationBuilder.CreateTable(
                 name: "rol",
                 columns: table => new
                 {
-                    IdRol = table.Column<int>(type: "integer", nullable: false)
+                    idRol = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    nombre = table.Column<string>(type: "text", nullable: false)
+                    nombre = table.Column<string>(type: "character varying", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_rol", x => x.IdRol);
+                    table.PrimaryKey("PK_Rol", x => x.idRol);
                 });
 
             migrationBuilder.CreateTable(
@@ -71,14 +71,14 @@ namespace P_Asignación_de_Tareas.Migrations
                 {
                     idTask = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    nameTask = table.Column<string>(type: "text", nullable: false),
-                    descriptionTask = table.Column<string>(type: "text", nullable: false),
+                    nameTask = table.Column<string>(type: "character varying", nullable: false),
+                    descriptionTask = table.Column<string>(type: "character varying", nullable: false),
                     dateTask = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     dateTaskCompletion = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_tasks", x => x.idTask);
+                    table.PrimaryKey("PK_Task", x => x.idTask);
                 });
 
             migrationBuilder.CreateTable(
@@ -88,17 +88,18 @@ namespace P_Asignación_de_Tareas.Migrations
                     IdOperationsRol = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     NameOperationRol = table.Column<string>(type: "text", nullable: false),
-                    IdModulo = table.Column<int>(type: "integer", nullable: false),
+                    IdModulo = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_operation_rol", x => x.IdOperationsRol);
+                    table.PrimaryKey("PK_OperationRol", x => x.IdOperationsRol);
                     table.ForeignKey(
-                        name: "FK_operation_rol_module",
+                        name: "FK_OperationRol_Module",
                         column: x => x.IdModulo,
                         principalTable: "module",
-                        principalColumn: "IdMod");
-                }); 
+                        principalColumn: "IdMod",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateTable(
                 name: "users",
@@ -107,9 +108,9 @@ namespace P_Asignación_de_Tareas.Migrations
                     idUser = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     password = table.Column<int>(type: "integer", nullable: false),
-                    emailUser = table.Column<string>(type: "text", nullable: true),
-                    nameUser = table.Column<string>(type: "text", nullable: true),
-                    IdRol = table.Column<int>(type: "integer", nullable: false),
+                    emailUser = table.Column<string>(type: "character varying", nullable: true),
+                    nameUser = table.Column<string>(type: "character varying", nullable: true),
+                    IdRol = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -118,7 +119,8 @@ namespace P_Asignación_de_Tareas.Migrations
                         name: "FK_users_rol_RolIdRol",
                         column: x => x.IdRol,
                         principalTable: "rol",
-                        principalColumn: "IdRol");
+                        principalColumn: "idRol",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -128,40 +130,43 @@ namespace P_Asignación_de_Tareas.Migrations
                     idProyect = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     idTasks = table.Column<int>(type: "integer", nullable: false),
-                    nameProyect = table.Column<string>(type: "text", nullable: false),
+                    nameProyect = table.Column<string>(type: "character varying", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_proyects", x => x.idProyect);
                     table.ForeignKey(
-                        name: "FK_proyects_tasks_TasksidTask",
+                        name: "FK_proyects_tasks_idTasks",
                         column: x => x.idTasks,
                         principalTable: "tasks",
-                        principalColumn: "idTask");
+                        principalColumn: "idTask",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "operaciones",
                 columns: table => new
                 {
-                    IdRolpOperation = table.Column<int>(type: "integer", nullable: false)
+                    IdOperaciones = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     IdRol = table.Column<int>(type: "integer", nullable: false),
-                    IdOperaciones = table.Column<int>(type: "integer", nullable: false),
+                    IdOperationRol = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_operaciones", x => x.IdRolpOperation);
+                    table.PrimaryKey("PK_Operaciones", x => x.IdOperaciones);
                     table.ForeignKey(
-                        name: "FK_operaciones_operation_rol_Operations_IdOperaciones",
-                        column: x => x.IdOperaciones,
+                        name: "FK_Operaciones_OperationRol",
+                        column: x => x.IdOperationRol,
                         principalTable: "operation_rol",
-                        principalColumn: "IdOperationsRol");
+                        principalColumn: "IdOperationsRol",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_operaciones_rol_IdRol",
+                        name: "FK_Operaciones_Rol",
                         column: x => x.IdRol,
                         principalTable: "rol",
-                        principalColumn: "IdRol");
+                        principalColumn: "idRol",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -173,31 +178,35 @@ namespace P_Asignación_de_Tareas.Migrations
                     idUser = table.Column<int>(type: "integer", nullable: false),
                     idProyect = table.Column<int>(type: "integer", nullable: false),
                     idCommet = table.Column<int>(type: "integer", nullable: false),
-                    idNotification = table.Column<int>(type: "integer", nullable: false),
+                    idNotification = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_auxiliarT", x => x.idAuxiliar);
+                    table.PrimaryKey("PK_Auxiliar", x => x.idAuxiliar);
                     table.ForeignKey(
-                        name: "FK_auxiliarT_comments_idCommet",
+                        name: "FK_Auxiliart_Comment",
                         column: x => x.idCommet,
                         principalTable: "comments",
-                        principalColumn: "idComment");
+                        principalColumn: "idComment",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_auxiliarT_notifications_idNotification",
+                        name: "FK_Auxiliart_Notification",
                         column: x => x.idNotification,
                         principalTable: "notifications",
-                        principalColumn: "idNotification");
+                        principalColumn: "idNotification",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_auxiliarT_proyects_idProyect",
+                        name: "FK_Auxiliart_Proyect",
                         column: x => x.idProyect,
                         principalTable: "proyects",
-                        principalColumn: "idProyect");
+                        principalColumn: "idProyect",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_auxiliarT_users_idUser",
+                        name: "FK_Auxiliart_User",
                         column: x => x.idUser,
                         principalTable: "users",
-                        principalColumn: "idUser");
+                        principalColumn: "idUser",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -221,9 +230,9 @@ namespace P_Asignación_de_Tareas.Migrations
                 column: "idUser");
 
             migrationBuilder.CreateIndex(
-                name: "IX_operaciones_Operations_IdOperaciones",
+                name: "IX_operaciones_IdOperationRol",
                 table: "operaciones",
-                column: "IdOperaciones");
+                column: "IdOperationRol");
 
             migrationBuilder.CreateIndex(
                 name: "IX_operaciones_IdRol",

@@ -6,8 +6,12 @@ namespace P_Asignación_de_Tareas.Models
     public class ApplicationDbcontext : DbContext
     {
 
+        public ApplicationDbcontext()
+        {
+        }
+
         public ApplicationDbcontext(DbContextOptions<ApplicationDbcontext> options)
-            : base(options) 
+            : base(options)
         {
         }
 
@@ -26,16 +30,156 @@ namespace P_Asignación_de_Tareas.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Users>().ToTable("users");
-            modelBuilder.Entity<Proyects>().ToTable("proyects");
-            modelBuilder.Entity<Tasks>().ToTable("tasks");
-            modelBuilder.Entity<Notifications>().ToTable("notifications");
-            modelBuilder.Entity<Comments>().ToTable("comments");
-            modelBuilder.Entity<AuxiliarT>().ToTable("auxiliarT");
-            modelBuilder.Entity<Rol>().ToTable("rol");
-            modelBuilder.Entity<Operaciones>().ToTable("operaciones");
-            modelBuilder.Entity<Operations_Rol>().ToTable("operation_rol");
-            modelBuilder.Entity<Module>().ToTable("module");
+            modelBuilder.Entity<Users>(entity =>
+            {
+
+                entity.HasKey(e => e.idUser).HasName("PK_users");
+
+                entity.ToTable("users");
+
+                entity.Property(e => e.idUser).HasColumnName("idUser");
+                entity.Property(e => e.password)
+                .HasColumnType("integer")
+                .HasColumnName("password");
+                entity.Property(e => e.emailUser)
+                .HasColumnType("character varying")
+                .HasColumnName("emailUser");
+                entity.Property(e => e.nameUser)
+                .HasColumnType("character varying")
+                .HasColumnName("nameUser");
+
+                entity.HasOne(d => d.Rol).WithMany(d => d.Users)
+                .HasForeignKey(d => d.IdRol)
+                .HasConstraintName("FK_users_rol_RolIdRol");
+
+            });
+
+            modelBuilder.Entity<Proyects>(entity => 
+            {
+                entity.HasKey(e => e.idProyect).HasName("PK_proyects");
+                                
+                entity.ToTable("proyects");
+
+                entity.Property(e => e.idProyect).HasColumnName("idProyect");
+                entity.Property(e => e.nameProyect)
+                .HasColumnType("character varying")
+                .HasColumnName("nameProyect");
+
+                entity.HasOne(d => d.Task).WithMany(d => d.Proyects)
+                .HasForeignKey(d => d.idTasks)
+                .HasConstraintName("FK_proyects_tasks_idTasks");            
+            });
+       
+            modelBuilder.Entity<Tasks>(entity =>
+            {
+                entity.HasKey(e => e.idTask).HasName("PK_Task");
+
+                entity.ToTable("tasks");
+
+                entity.Property(e => e.idTask).HasColumnName("idTask");
+                entity.Property(e => e.nameTask)
+                .HasColumnType("character varying")
+                .HasColumnName("nameTask");
+                entity.Property(e => e.descriptionTask)
+                .HasColumnType("character varying")
+                .HasColumnName("descriptionTask");
+                entity.Property(e => e.dateTask).HasColumnName("dateTask");
+                entity.Property(e => e.dateTaskCompletion).HasColumnName("dateTaskCompletion");
+            });
+
+            modelBuilder.Entity<Notifications>(entity => 
+            {
+                entity.HasKey(e => e.idNotification).HasName("PK_Notification");
+
+                entity.ToTable("notifications");
+
+                entity.Property(e => e.idNotification).HasColumnName("idNotification");
+                entity.Property(e => e.nameNotification)
+                .HasColumnType("character varying")
+                .HasColumnName("nameNotification");
+                entity.Property(e => e.descriptionNotification).HasColumnName("descriptionNotification");                
+                });
+
+            modelBuilder.Entity<Comments>(entity =>
+            {
+                entity.HasKey(e => e.idComment).HasName("PK_Comment");
+
+                entity.ToTable("comments");
+
+                entity.Property(e => e.idComment).HasColumnName("idComment");
+                entity.Property(e => e.descriptionCommet)
+                .HasColumnType("character varying")
+                .HasColumnName("descriptionCommet");
+            });
+            modelBuilder.Entity<AuxiliarT>(entity =>
+            {
+                entity.HasKey(e => e.idAuxiliar).HasName("PK_Auxiliar");
+
+                entity.ToTable("auxiliarT");
+
+                entity.HasOne(e => e.User).WithMany(e => e.AuxiliarT)
+                .HasForeignKey(e => e.idUser)
+                .HasConstraintName("FK_Auxiliart_User");
+
+                entity.HasOne(e => e.Proyect).WithMany(e => e.AuxiliarT)
+                .HasForeignKey(e => e.idProyect)
+                .HasConstraintName("FK_Auxiliart_Proyect");
+
+                entity.HasOne(e => e.Comment).WithMany(e => e.AuxiliarT)
+                .HasForeignKey(e => e.idCommet)
+                .HasConstraintName("FK_Auxiliart_Comment");
+
+                entity.HasOne(e => e.Notification).WithMany(e => e.AuxiliarT)
+                .HasForeignKey(e => e.idNotification)
+                .HasConstraintName("FK_Auxiliart_Notification");
+            });
+            modelBuilder.Entity<Rol>(entity =>
+            {
+                entity.HasKey(e => e.IdRol).HasName("PK_Rol");
+
+                entity.ToTable("rol");
+
+                entity.Property(e => e.IdRol).HasColumnName("idRol");
+                entity.Property(e => e.nombre)
+                .HasColumnType("character varying")
+                .HasColumnName("nombre");
+            });
+            modelBuilder.Entity<Operaciones>(entity =>
+            {
+                entity.HasKey(e => e.IdOperaciones).HasName("PK_Operaciones");
+
+                entity.ToTable("operaciones");
+
+                entity.HasOne(e => e.Rol).WithMany(e => e.Operacion)
+                .HasForeignKey(e => e.IdRol)
+                .HasConstraintName("FK_Operaciones_Rol");
+
+                entity.HasOne(e => e.OperationsRol).WithMany(e => e.Operaciones)
+                .HasForeignKey(e => e.IdOperationRol)
+                .HasConstraintName("FK_Operaciones_OperationRol");
+            });
+            modelBuilder.Entity<Operations_Rol>(entity =>
+            {
+                entity.HasKey(e => e.IdOperationsRol).HasName("PK_OperationRol");
+
+                entity.ToTable("operation_rol");
+
+                entity.Property(e => e.NameOperationRol)
+                .HasColumnName("NameOperationRol");
+                entity.HasOne(e => e.Module).WithMany(e => e.OperationsRol)
+                .HasForeignKey(e => e.IdModulo)
+                .HasConstraintName("FK_OperationRol_Module");
+            });
+            modelBuilder.Entity<Module>(entity =>
+            {
+                entity.HasKey(e => e.IdMod).HasName("PK_Module");
+
+                entity.ToTable("module");
+
+                entity.Property(e => e.NameMod)
+                .HasColumnType("character varying")
+                .HasColumnName("nameModule");
+            });
         }
     }
 }

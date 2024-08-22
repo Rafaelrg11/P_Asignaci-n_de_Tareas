@@ -40,7 +40,7 @@ namespace P_Asignación_de_Tareas.Controllers
         {
             Models.Operaciones operaciones = new Models.Operaciones()
             {
-                IdOperaciones = dto.IdOperaciones,
+                IdOperationRol = dto.IdOperationRol,
                 IdRol = dto.IdRol,
             };
             var operation = await _ope.CreateOperations(operaciones);
