@@ -38,7 +38,7 @@ namespace P_Asignación_de_Tareas.Operaciones
 
         public async Task<bool> UpdateModule(ModuleDto moduleDto)
         {
-            Module? module = await _context.Modules.FindAsync(moduleDto);
+            Module? module = await _context.Modules.FindAsync(moduleDto.IdMod);
             if (module != null)
             {
                 module.NameMod = moduleDto.NameMod;

@@ -38,7 +38,7 @@ namespace P_Asignación_de_Tareas.Operaciones
 
         public async Task<bool> UpdateProyect(ProyectsDto proyectsDto)
         {
-            Proyects? proyects = await _context.Proyects.FindAsync(proyectsDto);
+            Proyects? proyects = await _context.Proyects.FindAsync(proyectsDto.idProyect);
             if (proyects != null)
             {
                 proyects.nameProyect = proyectsDto.nameProyect;

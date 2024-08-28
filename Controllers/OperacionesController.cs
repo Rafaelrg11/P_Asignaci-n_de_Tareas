@@ -6,6 +6,7 @@ using P_Asignación_de_Tareas.Operaciones;
 
 namespace P_Asignación_de_Tareas.Controllers
 {
+
     [ApiController]
     [Route("[controller]")]
     public class OperacionesController : Controller
@@ -36,9 +37,9 @@ namespace P_Asignación_de_Tareas.Controllers
         }
 
         [HttpPost("CreateOperacion")]
-        public async Task<IActionResult> CreateOperacion([FromBody] OperacionesDto dto)
+        public async Task<IActionResult> CreateOperacion(OperacionesDto dto)
         {
-            Models.Operaciones operaciones = new Models.Operaciones()
+            OperationsXd operaciones = new OperationsXd()
             {
                 IdOperationRol = dto.IdOperationRol,
                 IdRol = dto.IdRol,

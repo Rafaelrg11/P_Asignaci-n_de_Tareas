@@ -37,7 +37,7 @@ namespace P_Asignación_de_Tareas.Operaciones
 
         public async Task<bool> UpdateTask(TasksDto tasksDto)
         {
-            Tasks? tasks = await _dbcontext.Tasks.FindAsync(tasksDto);
+            Tasks? tasks = await _dbcontext.Tasks.FindAsync(tasksDto.idTask);
 
             if (tasks != null)
             {

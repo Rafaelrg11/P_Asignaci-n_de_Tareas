@@ -1,3 +1,4 @@
+using Jose;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,7 @@ using System.Security.Claims;
 using System.Text;
 
 namespace P_Asignación_de_Tareas.Controllers
-{    
+{
     [ApiController]
     [Route("[controller]")]
     public class UsersController : ControllerBase
@@ -31,42 +32,46 @@ namespace P_Asignación_de_Tareas.Controllers
 
         }
 
-        [HttpPost("Validation")]
-        public IActionResult Login([FromBody] UsersDto usersDto)
+        [HttpPost("Login")]
+        public IActionResult Login([FromBody] ValidationUserDto usersDto)
         {
             var users = (from d in _dbcontext.Users
-                         where d.nameUser == usersDto.nameUser.Trim() && d.password == usersDto.password
-                         && d.emailUser == usersDto.emailUser.Trim() 
+                         where d.password == usersDto.password
+                         && d.emailUser == usersDto.EmailUser 
                          select d).FirstOrDefault();
 
             if (users != null)
             {
-                var keyBytes = Encoding.ASCII.GetBytes(_secretkey);
-                var claims = new ClaimsIdentity();
+                var keyBytes = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_secretkey));
+                
+                var claims = new List<Claim>{
+                    new Claim(JwtRegisteredClaimNames.Sub, usersDto.EmailUser), 
+                    new Claim("identificador de usuario", users.idUser.ToString()),
+                    new Claim("identificador del rol", users.IdRol.ToString())
+                    };
 
-                claims.AddClaim(new Claim(ClaimTypes.NameIdentifier, usersDto.emailUser));
+                var creds = new SigningCredentials(keyBytes, SecurityAlgorithms.HmacSha256);
 
-                var token = new SecurityTokenDescriptor
+                var tokenDescription = new SecurityTokenDescriptor()
                 {
-                    Subject = claims,
-                    Expires = DateTime.UtcNow.AddMinutes(5),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256Signature)
+                    Subject = new ClaimsIdentity(claims),
+                    Expires = DateTime.UtcNow.AddDays(1),
+                    SigningCredentials = creds
                 };
 
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var tokenConfig = tokenHandler.CreateToken(token);
+                var tokenConfig = tokenHandler.CreateToken(tokenDescription);
 
-                string tokenCreated = tokenHandler.WriteToken(tokenConfig);
+                string tokenCreated = tokenHandler.WriteToken(tokenConfig);              
 
-                return StatusCode(StatusCodes.Status200OK, new { token = tokenCreated });
-
+                return StatusCode(StatusCodes.Status200OK, new { Bearer = tokenCreated });
             }
+            
             else
             {
-                return StatusCode(StatusCodes.Status401Unauthorized, new { token = "" });
+                return StatusCode(StatusCodes.Status401Unauthorized, new { Bearer = "" });
             }
         }
-
 
         [HttpGet("GetUsers")]
         public async Task<IActionResult> GetUsers()
@@ -75,7 +80,7 @@ namespace P_Asignación_de_Tareas.Controllers
 
             return Ok(result);
         }
-
+     
         [HttpGet("GetUser/{idUser}")]
         public async Task<IActionResult> GetUSer(int idUser)
         {
@@ -83,8 +88,7 @@ namespace P_Asignación_de_Tareas.Controllers
 
             return Ok(result);
         }
-
-        [Authorize(Roles = "Creator")]
+        
         [HttpPost("CreateUser")]
         public async Task<IActionResult> CreateUser(UsersDto usersDto)
         {   

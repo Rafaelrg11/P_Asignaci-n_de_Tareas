@@ -37,7 +37,7 @@ namespace P_Asignación_de_Tareas.Operaciones
 
         public async Task<bool> UpdateComment(CommentsDto commentsDto)
         {
-            Comments? comments = await _context.Comments.FindAsync(commentsDto);
+            Comments? comments = await _context.Comments.FindAsync(commentsDto.idComment);
             if (comments != null) 
             {
                 comments.descriptionCommet = commentsDto.descriptionCommet;

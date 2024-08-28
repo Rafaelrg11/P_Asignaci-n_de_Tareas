@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using P_Asignación_de_Tareas.Dto;
 using P_Asignación_de_Tareas.Models;
 
@@ -11,23 +12,23 @@ namespace P_Asignación_de_Tareas.Operaciones
         {
             _context = dbcontext;
         }
-        public async Task<List<Models.Operaciones>> GetOperaciones()
+        public async Task<List<OperationsXd>> GetOperaciones()
         {
             var result = await _context.Operations.AsNoTracking().ToListAsync();    
             
             return result;
         }
 
-        public async Task<Models.Operaciones> GetOperation(int idOperation)
+        public async Task<OperationsXd> GetOperation(int idOperation)
         {
             var result = await _context.Operations.FindAsync(idOperation);
 
             return result;
         }
 
-        public async Task<Models.Operaciones> CreateOperations(Models.Operaciones operations)
+        public async Task<OperationsXd> CreateOperations(OperationsXd operations)
         {
-            var result =  await _context.Operations.AddAsync(operations);
+            var result = await _context.Operations.AddAsync(operations);
 
             await _context.SaveChangesAsync();
 
@@ -36,7 +37,7 @@ namespace P_Asignación_de_Tareas.Operaciones
 
         public async Task<bool> UpdateOperation(OperacionesDto operations)
         {
-            Models.Operaciones? ope = await _context.Operations.FindAsync(operations.IdOperaciones);
+            OperationsXd? ope = await _context.Operations.FindAsync(operations.IdOperaciones);
             if (ope != null) 
             {
                 ope.IdOperationRol = operations.IdOperationRol;

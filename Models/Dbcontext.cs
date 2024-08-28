@@ -22,7 +22,7 @@ namespace P_Asignación_de_Tareas.Models
         public virtual DbSet<Comments> Comments { get; set; }
         public virtual DbSet<AuxiliarT> AuxiliarTs { get; set; }
         public virtual DbSet<Rol> Rols { get; set; }
-        public virtual DbSet<Operaciones> Operations { get; set; }
+        public virtual DbSet<OperationsXd> Operations { get; set; }
         public virtual DbSet<Operations_Rol> OperationRols { get; set; }
         public virtual DbSet<Module> Modules { get; set; }
 
@@ -144,7 +144,7 @@ namespace P_Asignación_de_Tareas.Models
                 .HasColumnType("character varying")
                 .HasColumnName("nombre");
             });
-            modelBuilder.Entity<Operaciones>(entity =>
+            modelBuilder.Entity<OperationsXd>(entity =>
             {
                 entity.HasKey(e => e.IdOperaciones).HasName("PK_Operaciones");
 

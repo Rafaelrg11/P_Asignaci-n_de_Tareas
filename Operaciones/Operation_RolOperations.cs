@@ -37,7 +37,7 @@ namespace P_Asignación_de_Tareas.Operaciones
 
         public async Task<bool> UpdateOperationRol(Operations_rolDto operations_RolDto)
         {
-            Operations_Rol? operations = await _context.OperationRols.FindAsync(operations_RolDto);
+            Operations_Rol? operations = await _context.OperationRols.FindAsync(operations_RolDto.IdOperationsRol);
             if (operations != null) 
             {
                 operations.NameOperationRol = operations_RolDto.NameOperationRol;

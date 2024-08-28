@@ -37,7 +37,7 @@ namespace P_Asignación_de_Tareas.Operaciones
 
         public async Task<bool> UpdateNotification(NotificationsDto notificationsDto)
         {
-            Notifications? notifications = await _context.Notifications.FindAsync(notificationsDto);
+            Notifications? notifications = await _context.Notifications.FindAsync(notificationsDto.idNotification);
             if (notifications != null) 
             {
                 notifications.descriptionNotification = notificationsDto.descriptionNotification;
