@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using P_Asignación_de_Tareas.Dto;
 using P_Asignación_de_Tareas.Models;
 using P_Asignación_de_Tareas.Operaciones;
@@ -22,16 +23,38 @@ namespace P_Asignación_de_Tareas.Controllers
         [HttpGet("GetMudules")]
         public async Task<IActionResult> GetModules()
         {
-            var result = await _operation.GetModules();
+            await _operation.GetModules();
 
-            return Ok(result);
+            var AllModules = await _context.Modules.Select(a => new ModuleDto
+            {
+                IdMod = a.IdMod,
+                NameMod = a.NameMod,
+                Operations_RolDtos = a.OperationsRol.Select(a => new Operations_rolDto2
+                {
+                    IdOperationsRol = a.IdOperationsRol,
+                    NameOperationRol = a.NameOperationRol
+                }).ToList()
+            }).ToListAsync();
+
+            return Ok(AllModules);
         }
         [HttpGet("GetModule/{idModule}")]
         public async Task<IActionResult> GetModule(int idModule)
         {
-            var result = await _operation.GetModule(idModule);
+            await _operation.GetModule(idModule);
 
-            return Ok(result);
+            var module = await _context.Modules.Where(a => a.IdMod == idModule).Select(a => new ModuleDto
+            {
+                IdMod = a.IdMod,
+                NameMod = a.NameMod,
+                Operations_RolDtos = a.OperationsRol.Select(a => new Operations_rolDto2
+                {
+                    IdOperationsRol = a.IdOperationsRol,
+                    NameOperationRol = a.NameOperationRol
+                }).ToList()
+            }).ToListAsync();
+
+            return Ok(module);
         }
 
         [HttpPost("CreateModule")]

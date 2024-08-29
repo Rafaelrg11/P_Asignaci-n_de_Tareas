@@ -34,7 +34,7 @@ namespace P_Asignación_de_Tareas.Models
               
                 var root = context.Request.Path;
 
-                var excludePath = new List<string> { "/Users/Login" };
+                var excludePath = new List<string> { "/Users/Login", "/Users/CreateUser"};
 
                 var result = excludePath.Contains(root);
 

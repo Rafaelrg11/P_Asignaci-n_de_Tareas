@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using P_Asignación_de_Tareas.Dto;
 using P_Asignación_de_Tareas.Models;
 using P_Asignación_de_Tareas.Operaciones;
@@ -22,17 +23,57 @@ namespace P_Asignación_de_Tareas.Controllers
         [HttpGet("GetRols")]
         public async Task<IActionResult> GetRols()
         {
-            var result = await _operation.GetRols();
+            await _operation.GetRols();
 
-            return Ok(result);
+            var allRols = await _context.Rols.Select(a => new RolDto
+            {
+                IdRol = a.IdRol,
+                nombre = a.nombre,
+                Operacion = a.Operacion.Select(a => new OperacionesDto
+                {
+                    IdRol = a.IdRol,
+                    IdOperaciones = a.IdOperaciones,
+                    IdOperationRol = a.IdOperationRol
+                }).ToList(),
+                User = a.Users.Select(a => new UsersDto
+                {
+                    nameUser = a.nameUser,
+                    emailUser = a.emailUser,
+                    password = a.password,
+                    idUser = a.idUser,
+                    IdRol = a.IdRol
+                }).ToList()
+            }).ToListAsync();
+
+            return Ok(allRols);
         }
 
         [HttpGet("GetRol/{idRol}")]
         public async Task<IActionResult> GetRol(int idRol)
         {
-            var result = await _operation.GetRol(idRol);
+            await _operation.GetRol(idRol);
 
-            return Ok(result);
+            var rols = await _context.Rols.Where(a => a.IdRol == idRol).Select(a => new RolDto
+            {
+                IdRol = a.IdRol,
+                nombre = a.nombre,
+                Operacion = a.Operacion.Select(a => new OperacionesDto
+                {
+                    IdRol = a.IdRol,
+                    IdOperaciones = a.IdOperaciones,
+                    IdOperationRol = a.IdOperationRol
+                }).ToList(),
+                User = a.Users.Select(a => new UsersDto
+                {
+                    nameUser = a.nameUser,
+                    emailUser = a.emailUser,
+                    password = a.password,
+                    idUser = a.idUser,
+                    IdRol = a.IdRol
+                }).ToList()
+            }).ToListAsync();
+
+            return Ok(rols);
         }
 
         [HttpPost("CreateRol")]

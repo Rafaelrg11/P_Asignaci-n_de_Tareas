@@ -37,8 +37,6 @@ namespace P_Asignación_de_Tareas.Controllers
         {
             AuxiliarT auxiliarT = new AuxiliarT()
             {
-                idCommet = auxiliarTDto.idCommet,
-                idNotification = auxiliarTDto.idNotification,
                 idProyect = auxiliarTDto.idProyect,
                 idUser = auxiliarTDto.idUser
             };

@@ -42,6 +42,7 @@ namespace P_Asignación_de_Tareas.Controllers
             Comments comments = new Comments()
             {
                 descriptionCommet = commentsDto.descriptionCommet,
+                idTask = commentsDto.idTask,
             };
 
             var result = await _operations.CreateComment(comments);

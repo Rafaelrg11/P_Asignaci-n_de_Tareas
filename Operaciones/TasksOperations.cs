@@ -44,7 +44,9 @@ namespace P_Asignación_de_Tareas.Operaciones
                 tasks.dateTaskCompletion = tasksDto.dateTaskCompletion;
                 tasks.dateTask = tasksDto.dateTask;
                 tasks.descriptionTask = tasksDto.descriptionTask;
-                tasks.nameTask = tasksDto.nameTask;              
+                tasks.nameTask = tasksDto.nameTask;    
+                tasks.idProyect = tasksDto.idProyect;
+                tasks.state = tasksDto.state;
 
                 await _dbcontext.SaveChangesAsync();
             }
@@ -65,7 +67,6 @@ namespace P_Asignación_de_Tareas.Operaciones
             await _dbcontext.SaveChangesAsync();
 
             return true;
-
         }
     }
 }

@@ -41,6 +41,7 @@ namespace P_Asignación_de_Tareas.Operaciones
             if (comments != null) 
             {
                 comments.descriptionCommet = commentsDto.descriptionCommet;
+                comments.idTask = commentsDto.idTask;
 
                 await _context.SaveChangesAsync();
             }

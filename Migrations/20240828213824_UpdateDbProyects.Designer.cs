@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using P_Asignación_de_Tareas.Models;
@@ -11,9 +12,11 @@ using P_Asignación_de_Tareas.Models;
 namespace P_Asignación_de_Tareas.Migrations
 {
     [DbContext(typeof(ApplicationDbcontext))]
-    partial class ApplicationDbcontextModelSnapshot : ModelSnapshot
+    [Migration("20240828213824_UpdateDbProyects")]
+    partial class UpdateDbProyects
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,8 +56,6 @@ namespace P_Asignación_de_Tareas.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("idComment");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("idComment"));
-
                     b.Property<string>("descriptionCommet")
                         .IsRequired()
                         .HasColumnType("character varying")
@@ -65,8 +66,6 @@ namespace P_Asignación_de_Tareas.Migrations
 
                     b.HasKey("idComment")
                         .HasName("PK_Comment");
-
-                    b.HasIndex("idTask");
 
                     b.ToTable("comments", (string)null);
                 });
@@ -97,8 +96,6 @@ namespace P_Asignación_de_Tareas.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("idNotification");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("idNotification"));
-
                     b.Property<string>("descriptionNotification")
                         .IsRequired()
                         .HasColumnType("text")
@@ -114,8 +111,6 @@ namespace P_Asignación_de_Tareas.Migrations
 
                     b.HasKey("idNotification")
                         .HasName("PK_Notification");
-
-                    b.HasIndex("idUSer");
 
                     b.ToTable("notifications", (string)null);
                 });
@@ -215,8 +210,6 @@ namespace P_Asignación_de_Tareas.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("idTask");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("idTask"));
-
                     b.Property<DateTime>("dateTask")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("dateTask");
@@ -238,15 +231,8 @@ namespace P_Asignación_de_Tareas.Migrations
                         .HasColumnType("character varying")
                         .HasColumnName("nameTask");
 
-                    b.Property<string>("state")
-                        .IsRequired()
-                        .HasColumnType("character varying")
-                        .HasColumnName("state");
-
                     b.HasKey("idTask")
                         .HasName("PK_Task");
-
-                    b.HasIndex("idProyect");
 
                     b.ToTable("tasks", (string)null);
                 });
@@ -308,7 +294,7 @@ namespace P_Asignación_de_Tareas.Migrations
                 {
                     b.HasOne("P_Asignación_de_Tareas.Models.Tasks", "Tasks")
                         .WithMany("Comment")
-                        .HasForeignKey("idTask")
+                        .HasForeignKey("idComment")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_Tasks_Comments");
@@ -320,7 +306,7 @@ namespace P_Asignación_de_Tareas.Migrations
                 {
                     b.HasOne("P_Asignación_de_Tareas.Models.Users", "User")
                         .WithMany("Notification")
-                        .HasForeignKey("idUSer")
+                        .HasForeignKey("idNotification")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_Notification_User");
@@ -365,7 +351,7 @@ namespace P_Asignación_de_Tareas.Migrations
                 {
                     b.HasOne("P_Asignación_de_Tareas.Models.Proyects", "Proyects")
                         .WithMany("Tasks")
-                        .HasForeignKey("idProyect")
+                        .HasForeignKey("idTask")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_Tasks_Comments");

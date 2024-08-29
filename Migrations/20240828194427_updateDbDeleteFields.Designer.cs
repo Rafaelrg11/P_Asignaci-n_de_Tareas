@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using P_Asignación_de_Tareas.Models;
@@ -11,9 +12,11 @@ using P_Asignación_de_Tareas.Models;
 namespace P_Asignación_de_Tareas.Migrations
 {
     [DbContext(typeof(ApplicationDbcontext))]
-    partial class ApplicationDbcontextModelSnapshot : ModelSnapshot
+    [Migration("20240828194427_updateDbDeleteFields")]
+    partial class updateDbDeleteFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,13 +63,8 @@ namespace P_Asignación_de_Tareas.Migrations
                         .HasColumnType("character varying")
                         .HasColumnName("descriptionCommet");
 
-                    b.Property<int>("idTask")
-                        .HasColumnType("integer");
-
                     b.HasKey("idComment")
                         .HasName("PK_Comment");
-
-                    b.HasIndex("idTask");
 
                     b.ToTable("comments", (string)null);
                 });
@@ -104,9 +102,6 @@ namespace P_Asignación_de_Tareas.Migrations
                         .HasColumnType("text")
                         .HasColumnName("descriptionNotification");
 
-                    b.Property<int>("idUSer")
-                        .HasColumnType("integer");
-
                     b.Property<string>("nameNotification")
                         .IsRequired()
                         .HasColumnType("character varying")
@@ -114,8 +109,6 @@ namespace P_Asignación_de_Tareas.Migrations
 
                     b.HasKey("idNotification")
                         .HasName("PK_Notification");
-
-                    b.HasIndex("idUSer");
 
                     b.ToTable("notifications", (string)null);
                 });
@@ -177,6 +170,9 @@ namespace P_Asignación_de_Tareas.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("idProyect"));
 
+                    b.Property<int>("idTasks")
+                        .HasColumnType("integer");
+
                     b.Property<string>("nameProyect")
                         .IsRequired()
                         .HasColumnType("character varying")
@@ -184,6 +180,8 @@ namespace P_Asignación_de_Tareas.Migrations
 
                     b.HasKey("idProyect")
                         .HasName("PK_proyects");
+
+                    b.HasIndex("idTasks");
 
                     b.ToTable("proyects", (string)null);
                 });
@@ -230,23 +228,13 @@ namespace P_Asignación_de_Tareas.Migrations
                         .HasColumnType("character varying")
                         .HasColumnName("descriptionTask");
 
-                    b.Property<int>("idProyect")
-                        .HasColumnType("integer");
-
                     b.Property<string>("nameTask")
                         .IsRequired()
                         .HasColumnType("character varying")
                         .HasColumnName("nameTask");
 
-                    b.Property<string>("state")
-                        .IsRequired()
-                        .HasColumnType("character varying")
-                        .HasColumnName("state");
-
                     b.HasKey("idTask")
                         .HasName("PK_Task");
-
-                    b.HasIndex("idProyect");
 
                     b.ToTable("tasks", (string)null);
                 });
@@ -304,30 +292,6 @@ namespace P_Asignación_de_Tareas.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("P_Asignación_de_Tareas.Models.Comments", b =>
-                {
-                    b.HasOne("P_Asignación_de_Tareas.Models.Tasks", "Tasks")
-                        .WithMany("Comment")
-                        .HasForeignKey("idTask")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_Tasks_Comments");
-
-                    b.Navigation("Tasks");
-                });
-
-            modelBuilder.Entity("P_Asignación_de_Tareas.Models.Notifications", b =>
-                {
-                    b.HasOne("P_Asignación_de_Tareas.Models.Users", "User")
-                        .WithMany("Notification")
-                        .HasForeignKey("idUSer")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_Notification_User");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("P_Asignación_de_Tareas.Models.OperationsXd", b =>
                 {
                     b.HasOne("P_Asignación_de_Tareas.Models.Operations_Rol", "OperationsRol")
@@ -361,16 +325,16 @@ namespace P_Asignación_de_Tareas.Migrations
                     b.Navigation("Module");
                 });
 
-            modelBuilder.Entity("P_Asignación_de_Tareas.Models.Tasks", b =>
+            modelBuilder.Entity("P_Asignación_de_Tareas.Models.Proyects", b =>
                 {
-                    b.HasOne("P_Asignación_de_Tareas.Models.Proyects", "Proyects")
-                        .WithMany("Tasks")
-                        .HasForeignKey("idProyect")
+                    b.HasOne("P_Asignación_de_Tareas.Models.Tasks", "Task")
+                        .WithMany("Proyects")
+                        .HasForeignKey("idTasks")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_Tasks_Comments");
+                        .HasConstraintName("FK_proyects_tasks_idTasks");
 
-                    b.Navigation("Proyects");
+                    b.Navigation("Task");
                 });
 
             modelBuilder.Entity("P_Asignación_de_Tareas.Models.Users", b =>
@@ -398,8 +362,6 @@ namespace P_Asignación_de_Tareas.Migrations
             modelBuilder.Entity("P_Asignación_de_Tareas.Models.Proyects", b =>
                 {
                     b.Navigation("AuxiliarT");
-
-                    b.Navigation("Tasks");
                 });
 
             modelBuilder.Entity("P_Asignación_de_Tareas.Models.Rol", b =>
@@ -411,14 +373,12 @@ namespace P_Asignación_de_Tareas.Migrations
 
             modelBuilder.Entity("P_Asignación_de_Tareas.Models.Tasks", b =>
                 {
-                    b.Navigation("Comment");
+                    b.Navigation("Proyects");
                 });
 
             modelBuilder.Entity("P_Asignación_de_Tareas.Models.Users", b =>
                 {
                     b.Navigation("AuxiliarT");
-
-                    b.Navigation("Notification");
                 });
 #pragma warning restore 612, 618
         }

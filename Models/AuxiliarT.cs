@@ -10,11 +10,7 @@ namespace P_Asignación_de_Tareas.Models
         public int idAuxiliar { get; set; }       
         public int idUser { get; set; }
         public int idProyect { get; set; }
-        public int idCommet { get; set; }
-        public int idNotification { get; set; }
         public virtual Users User { get; set; }
-        public virtual Notifications Notification { get; set; }
-        public virtual Comments Comment { get; set; }
         public virtual Proyects Proyect { get; set; }
 
     }

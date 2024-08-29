@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using P_Asignación_de_Tareas.Dto;
 using P_Asignación_de_Tareas.Models;
 using P_Asignación_de_Tareas.Operaciones;
@@ -22,26 +23,66 @@ namespace P_Asignación_de_Tareas.Controllers
         [HttpGet("GetProyects")]
         public async Task<IActionResult> GetProyects()
         {
-            var result = await _operations.GetProyects();
+            await _operations.GetProyects();
 
-            return Ok(result);
+            var allProyects = await _dbcontext.Proyects.Select(a => new ProyectsDto
+            {
+                idProyect = a.idProyect,
+                nameProyect = a.nameProyect,
+                task = a.Tasks.Select(a => new TasksDto
+                {
+                    idProyect = a.idProyect,
+                    idTask = a.idTask,
+                    nameTask = a.nameTask,
+                    descriptionTask = a.descriptionTask,
+                    dateTask = a.dateTask,
+                    dateTaskCompletion = a.dateTaskCompletion
+                }).ToList(),
+                Auxiliar = a.AuxiliarT.Select(a => new AuxiliarTDto
+                {
+                    idAuxiliar = a.idAuxiliar,
+                    idProyect = a.idProyect,
+                    idUser = a.idUser
+                }).ToList()
+            }).ToListAsync();
+
+            return Ok(allProyects);
         }
 
         [HttpGet("GetProyect/{idProyect}")]
         public async Task<IActionResult> GetProyect(int idProyect)
         {
-            var result = await _operations.GetProyect(idProyect);
+           await _operations.GetProyect(idProyect);
 
-            return Ok(result);
+            var proyect = await _dbcontext.Proyects.Where(a => a.idProyect == idProyect).Select(a => new ProyectsDto
+            {
+                idProyect = a.idProyect,
+                nameProyect = a.nameProyect,
+                task = a.Tasks.Select(a => new TasksDto
+                {
+                    idProyect = a.idProyect,
+                    idTask = a.idTask,
+                    nameTask = a.nameTask,
+                    descriptionTask = a.descriptionTask,
+                    dateTask = a.dateTask,
+                    dateTaskCompletion = a.dateTaskCompletion
+                }).ToList(),
+                Auxiliar = a.AuxiliarT.Select(a => new AuxiliarTDto
+                {
+                    idAuxiliar = a.idAuxiliar,
+                    idProyect = a.idProyect,
+                    idUser = a.idUser
+                }).ToList()
+            }).ToListAsync();
+
+            return Ok(proyect);
         }
 
-        [Authorize(Roles = "Master")]
         [HttpPost("CreateProyect")]
         public async Task<IActionResult> CreateProyect(ProyectsDto proyectsDto)
         {
             Proyects proyects = new Proyects()
             {
-                idTasks = proyectsDto.idTasks,
                 nameProyect = proyectsDto.nameProyect,
             };
 

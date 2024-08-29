@@ -10,6 +10,7 @@ namespace P_Asignación_de_Tareas.Models
         public int idNotification { get; set; }
         public string nameNotification { get; set; }
         public string descriptionNotification { get; set; }
-        public virtual ICollection<AuxiliarT> AuxiliarT { get; set; } = new List<AuxiliarT>();
+        public int idUSer { get; set; }
+        public virtual Users User { get; set; }
     }
 }

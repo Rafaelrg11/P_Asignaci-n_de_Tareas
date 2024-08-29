@@ -45,7 +45,7 @@ namespace P_Asignación_de_Tareas.Controllers
                 var keyBytes = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_secretkey));
                 
                 var claims = new List<Claim>{
-                    new Claim(JwtRegisteredClaimNames.Sub, usersDto.EmailUser), 
+                    new Claim(JwtRegisteredClaimNames.Sub, users.emailUser), 
                     new Claim("identificador de usuario", users.idUser.ToString()),
                     new Claim("identificador del rol", users.IdRol.ToString())
                     };
@@ -76,19 +76,47 @@ namespace P_Asignación_de_Tareas.Controllers
         [HttpGet("GetUsers")]
         public async Task<IActionResult> GetUsers()
         {
-            var result = await _operations.GetUsers();
+            await _operations.GetUsers();
 
-            return Ok(result);
+            var allUsers = await _dbcontext.Users.Select(a => new UsersDto
+            {
+                idUser = a.idUser,
+                IdRol = a.IdRol,
+                nameUser = a.nameUser,
+                emailUser = a.emailUser,
+                password = a.password,
+                rolDto = new RolDto
+                {
+                    IdRol = a.IdRol,
+                    nombre = a.Rol.nombre
+                }
+            }).ToListAsync();
+
+            return Ok(allUsers);
         }
      
         [HttpGet("GetUser/{idUser}")]
         public async Task<IActionResult> GetUSer(int idUser)
         {
-            var result = await _operations.GetUser(idUser);
+            await _operations.GetUser(idUser);
 
-            return Ok(result);
+            var user = await _dbcontext.Users.Where(a => a.idUser == idUser).Select(a => new UsersDto
+            {
+                idUser = a.idUser,
+                IdRol = a.IdRol,
+                nameUser = a.nameUser,
+                emailUser = a.emailUser,
+                password = a.password,
+                rolDto = new RolDto
+                {
+                    IdRol = a.IdRol,
+                    nombre = a.Rol.nombre
+                }
+            }).ToListAsync();       
+
+            return Ok(user);
         }
-        
+       
         [HttpPost("CreateUser")]
         public async Task<IActionResult> CreateUser(UsersDto usersDto)
         {   
@@ -97,12 +125,28 @@ namespace P_Asignación_de_Tareas.Controllers
                     nameUser = usersDto.nameUser,
                     emailUser = usersDto.emailUser,
                     password = usersDto.password,      
-                    IdRol = usersDto.IdRol
+                    IdRol = usersDto.IdRol,
                 };
 
                 var operation = await _operations.CreateUser(users);
 
                 return Ok(operation);
+        }
+
+        [HttpPut("UpdateUser/{id}")]
+        public async Task<bool> UpdateUser(UsersDto usersDto)
+        {
+            var result = await _operations.UpdateUser(usersDto);
+
+            return result;
+        }
+
+        [HttpDelete("DeleteUser/{id}")]
+        public async Task<bool> DeleteUser(int idUser)
+        {
+            var result = await _operations.DeleteUser(idUser);
+
+            return result;
         }
     }
 }

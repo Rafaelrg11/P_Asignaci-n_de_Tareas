@@ -8,7 +8,8 @@ namespace P_Asignación_de_Tareas.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int idComment {  get; set; }
+        public int idTask { get; set; }
         public string descriptionCommet { get; set; }
-        public virtual ICollection<AuxiliarT> AuxiliarT { get; set; } = new List<AuxiliarT>();
+        public virtual Tasks Tasks { get; set; }
     }
 }

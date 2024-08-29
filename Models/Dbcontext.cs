@@ -64,10 +64,6 @@ namespace P_Asignación_de_Tareas.Models
                 entity.Property(e => e.nameProyect)
                 .HasColumnType("character varying")
                 .HasColumnName("nameProyect");
-
-                entity.HasOne(d => d.Task).WithMany(d => d.Proyects)
-                .HasForeignKey(d => d.idTasks)
-                .HasConstraintName("FK_proyects_tasks_idTasks");            
             });
        
             modelBuilder.Entity<Tasks>(entity =>
@@ -85,6 +81,12 @@ namespace P_Asignación_de_Tareas.Models
                 .HasColumnName("descriptionTask");
                 entity.Property(e => e.dateTask).HasColumnName("dateTask");
                 entity.Property(e => e.dateTaskCompletion).HasColumnName("dateTaskCompletion");
+                entity.Property(e => e.state).HasColumnType("character varying").HasColumnName("state");
+
+                entity.HasOne(d => d.Proyects).WithMany(d => d.Tasks)
+                .HasForeignKey(d => d.idProyect)
+                .HasConstraintName("FK_Tasks_Comments");
+
             });
 
             modelBuilder.Entity<Notifications>(entity => 
@@ -97,7 +99,11 @@ namespace P_Asignación_de_Tareas.Models
                 entity.Property(e => e.nameNotification)
                 .HasColumnType("character varying")
                 .HasColumnName("nameNotification");
-                entity.Property(e => e.descriptionNotification).HasColumnName("descriptionNotification");                
+                entity.Property(e => e.descriptionNotification).HasColumnName("descriptionNotification");
+
+                entity.HasOne(d => d.User).WithMany(d => d.Notification)
+                .HasForeignKey(d => d.idUSer)
+                .HasConstraintName("FK_Notification_User");
                 });
 
             modelBuilder.Entity<Comments>(entity =>
@@ -110,6 +116,10 @@ namespace P_Asignación_de_Tareas.Models
                 entity.Property(e => e.descriptionCommet)
                 .HasColumnType("character varying")
                 .HasColumnName("descriptionCommet");
+
+                entity.HasOne(d => d.Tasks).WithMany(d => d.Comment)
+                .HasForeignKey(d => d.idTask)
+                .HasConstraintName("FK_Tasks_Comments");
             });
             modelBuilder.Entity<AuxiliarT>(entity =>
             {
@@ -123,15 +133,7 @@ namespace P_Asignación_de_Tareas.Models
 
                 entity.HasOne(e => e.Proyect).WithMany(e => e.AuxiliarT)
                 .HasForeignKey(e => e.idProyect)
-                .HasConstraintName("FK_Auxiliart_Proyect");
-
-                entity.HasOne(e => e.Comment).WithMany(e => e.AuxiliarT)
-                .HasForeignKey(e => e.idCommet)
-                .HasConstraintName("FK_Auxiliart_Comment");
-
-                entity.HasOne(e => e.Notification).WithMany(e => e.AuxiliarT)
-                .HasForeignKey(e => e.idNotification)
-                .HasConstraintName("FK_Auxiliart_Notification");
+                .HasConstraintName("FK_Auxiliart_Proyect");               
             });
             modelBuilder.Entity<Rol>(entity =>
             {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using P_Asignación_de_Tareas.Dto;
 using P_Asignación_de_Tareas.Models;
 using P_Asignación_de_Tareas.Operaciones;
@@ -22,17 +23,66 @@ namespace P_Asignación_de_Tareas.Controllers
         [HttpGet("GetTasks")]
         public async Task<IActionResult> GetTasks()
         {
-            var result = await _operations.GetTasks();
+            await _operations.GetTasks();
 
-            return Ok(result);
+            var allTasks = await _dbcontext.Tasks.Select(a => new TasksDto
+            {
+                idProyect = a.idProyect,
+                idTask = a.idTask,
+                nameTask = a.nameTask,
+                descriptionTask = a.descriptionTask,
+                dateTask = a.dateTask,
+                dateTaskCompletion = a.dateTaskCompletion,
+                state = a.state,
+                proyects = new ProyectsDto
+                {
+                    idProyect = a.idProyect,
+                    nameProyect = a.Proyects.nameProyect
+                },
+                comments = a.Comment.Select(a => new CommentsDto
+                {
+                    idComment = a.idComment,
+                    idTask = a.idTask,
+                    descriptionCommet = a.descriptionCommet
+                }).ToList()
+            }).ToListAsync();
+
+            return Ok(allTasks);
         }
 
         [HttpGet("GetTask/{idTask}")]
         public async Task<IActionResult> GetTask(int idTask)
         {
-            var result = await _operations.GetTask(idTask);
+            await _operations.GetTask(idTask);
 
-            return Ok(result);
+            var task = await _dbcontext.Tasks.Where(a => a.idTask == idTask).Select(a => new TasksDto
+            {
+                idProyect = a.idProyect,
+                idTask = a.idTask,
+                nameTask = a.nameTask,
+                descriptionTask = a.descriptionTask,
+                dateTask = a.dateTask,
+                dateTaskCompletion = a.dateTaskCompletion,
+                state = a.state,
+                proyects = new ProyectsDto
+                {
+                    idProyect = a.idProyect,
+                    nameProyect = a.Proyects.nameProyect
+                },
+                comments = a.Comment.Select(a => new CommentsDto
+                {
+                    idComment = a.idComment,
+                    idTask = a.idTask,
+                    descriptionCommet = a.descriptionCommet
+                }).ToList()
+            }).ToListAsync();
+
+            /*if (result.dateTask == result.dateTaskCompletion)
+            {
+                result.state = "Terminada";
+            }*/
+
+            return Ok(task);
         }
 
         [HttpPost("CreateTask")]
@@ -43,8 +93,10 @@ namespace P_Asignación_de_Tareas.Controllers
                 descriptionTask = tasksDto.descriptionTask,
                 nameTask = tasksDto.nameTask,
                 dateTask = tasksDto.dateTask,
-                dateTaskCompletion = tasksDto.dateTaskCompletion
-            };
+                dateTaskCompletion = tasksDto.dateTaskCompletion,
+                idProyect = tasksDto.idProyect,     
+                state = tasksDto.state,
+            };           
 
             var result = await _operations.CreateTask(task);
 

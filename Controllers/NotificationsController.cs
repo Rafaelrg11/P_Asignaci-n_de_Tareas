@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using P_Asignación_de_Tareas.Dto;
 using P_Asignación_de_Tareas.Models;
 using P_Asignación_de_Tareas.Operaciones;
@@ -22,17 +23,49 @@ namespace P_Asignación_de_Tareas.Controllers
         [HttpGet("GetNotifications")]
         public async Task<IActionResult> GetNotifications()
         {
-            var result = await _operations.GetNotifications();
+            await _operations.GetNotifications();
 
-            return Ok(result);
+            var allNotifications = await _dbcontext.Notifications.Select(a => new NotificationsDto
+            {
+                descriptionNotification = a.descriptionNotification,
+                nameNotification = a.nameNotification,
+                idNotification = a.idNotification,
+                idUser = a.idUSer,
+                UserDto = new UsersDto
+                {
+                    idUser = a.User.idUser,
+                    IdRol = a.User.IdRol,
+                    emailUser = a.User.emailUser,
+                    nameUser = a.User.nameUser,
+                    password = a.User.password
+                }
+            }).ToListAsync();
+
+            return Ok(allNotifications);
         }
 
         [HttpGet("GetNotification/{idNotifi}")]
         public async Task<IActionResult> GetNotifications(int idNotifi)
         {
-            var result = await _operations.GetNotification(idNotifi);
+            await _operations.GetNotification(idNotifi);
 
-            return Ok(result);
+            var notifi =  await _dbcontext.Notifications.Where(a => a.idNotification == idNotifi).Select(a => new NotificationsDto 
+            {
+                descriptionNotification = a.descriptionNotification,
+                nameNotification = a.nameNotification,
+                idNotification = a.idNotification,
+                idUser = a.idUSer,
+                UserDto = new UsersDto
+                {
+                    idUser = a.User.idUser,
+                    IdRol = a.User.IdRol,
+                    emailUser = a.User.emailUser,
+                    nameUser = a.User.nameUser,
+                    password = a.User.password
+                }
+            }).ToListAsync();
+
+            return Ok(notifi);
         }
 
         [HttpPost("CreateNotification")]
@@ -42,6 +75,7 @@ namespace P_Asignación_de_Tareas.Controllers
             {
                 nameNotification = notifications.nameNotification,
                 descriptionNotification = notifications.descriptionNotification,
+                idUSer = notifications.idUser
             };
 
             var operations = await _operations.CreateNotification(notifi);

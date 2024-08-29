@@ -42,9 +42,7 @@ namespace P_Asignación_de_Tareas.Operaciones
             AuxiliarT? auxiliarT = await _dbcontext.AuxiliarTs.FindAsync(auxiliarTDto.idAuxiliar);
             if (auxiliarT != null)
             {
-                auxiliarT.idCommet = auxiliarTDto.idCommet;
                 auxiliarT.idProyect = auxiliarTDto.idProyect;
-                auxiliarT.idNotification = auxiliarTDto.idNotification;
                 auxiliarT.idUser = auxiliarTDto.idUser;
 
                 await _dbcontext.SaveChangesAsync();

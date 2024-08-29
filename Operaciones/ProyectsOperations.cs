@@ -42,7 +42,6 @@ namespace P_Asignación_de_Tareas.Operaciones
             if (proyects != null)
             {
                 proyects.nameProyect = proyectsDto.nameProyect;
-                proyects.idTasks = proyectsDto.idTasks;
 
                 await _context.SaveChangesAsync();
             }

@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Documents.SystemFunctions;
+using Microsoft.EntityFrameworkCore;
 using P_Asignación_de_Tareas.Dto;
 using P_Asignación_de_Tareas.Models;
 
@@ -7,7 +10,7 @@ namespace P_Asignación_de_Tareas.Operaciones
     public class NotificationOperations
     {
         public ApplicationDbcontext _context;
-        public NotificationOperations(ApplicationDbcontext dbcontext) 
+        public NotificationOperations(ApplicationDbcontext dbcontext)
         {
             _context = dbcontext;
         }
@@ -15,13 +18,12 @@ namespace P_Asignación_de_Tareas.Operaciones
         public async Task<List<Notifications>> GetNotifications()
         {
             var result = await _context.Notifications.AsNoTracking().ToListAsync();
-
+            
             return result;
         }
-
         public async Task<Notifications> GetNotification(int idNotification)
         {
-            var result =  await _context.Notifications.FindAsync(idNotification);
+            var result = await _context.Notifications.FindAsync(idNotification);
 
             return result;
         }
@@ -38,10 +40,11 @@ namespace P_Asignación_de_Tareas.Operaciones
         public async Task<bool> UpdateNotification(NotificationsDto notificationsDto)
         {
             Notifications? notifications = await _context.Notifications.FindAsync(notificationsDto.idNotification);
-            if (notifications != null) 
+            if (notifications != null)
             {
                 notifications.descriptionNotification = notificationsDto.descriptionNotification;
                 notifications.nameNotification = notificationsDto.nameNotification;
+                notifications.idUSer = notificationsDto.idUser;
 
                 await _context.SaveChangesAsync();
             }
@@ -61,6 +64,7 @@ namespace P_Asignación_de_Tareas.Operaciones
 
             return true;
         }
-
     }
+
 }
+

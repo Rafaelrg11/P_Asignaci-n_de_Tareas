@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using P_Asignación_de_Tareas.Dto;
 using P_Asignación_de_Tareas.Models;
 using P_Asignación_de_Tareas.Operaciones;
@@ -23,17 +24,51 @@ namespace P_Asignación_de_Tareas.Controllers
         [HttpGet("GetOperaciones")]
         public async Task<IActionResult> GetOperaciones()
         {
-            var result = await _ope.GetOperaciones();
+            await _ope.GetOperaciones();
 
-            return Ok(result);
+            var AllOperations = await _context.Operations.Select(a => new OperacionesDto
+            {
+                IdOperaciones = a.IdOperaciones,
+                IdOperationRol = a.IdOperationRol,
+                IdRol = a.IdRol,
+                Rol = new RolDto2
+                {
+                    IdRol = a.IdRol,
+                    nombre = a.Rol.nombre
+                },
+                operations_Rol = new Operations_rolDto2
+                {
+                    IdOperationsRol = a.IdOperationRol,
+                    NameOperationRol = a.OperationsRol.NameOperationRol
+                }
+            }).ToListAsync();
+
+            return Ok(AllOperations);
         }
 
         [HttpGet("GetOperacion/{idOperacion}")]
         public async Task<IActionResult> GetOperacion(int idOperacion)
         {
-            var result = await _ope.GetOperation(idOperacion);
+            await _ope.GetOperation(idOperacion);
 
-            return Ok(result);
+            var operation = await _context.Operations.Where(a => a.IdOperaciones == idOperacion).Select(a => new OperacionesDto
+            {
+                IdOperaciones = a.IdOperaciones,
+                IdOperationRol = a.IdOperationRol,
+                IdRol = a.IdRol,
+                Rol = new RolDto2
+                {
+                    IdRol = a.IdRol,
+                    nombre = a.Rol.nombre
+                },
+                operations_Rol = new Operations_rolDto2
+                {
+                    IdOperationsRol = a.IdOperationRol,
+                    NameOperationRol = a.OperationsRol.NameOperationRol
+                }
+            }).ToListAsync();
+
+            return Ok(operation);
         }
 
         [HttpPost("CreateOperacion")]
