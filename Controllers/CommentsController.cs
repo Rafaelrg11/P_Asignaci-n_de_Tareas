@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using P_Asignación_de_Tareas.Dto;
 using P_Asignación_de_Tareas.Models;
 using P_Asignación_de_Tareas.Operaciones;
@@ -23,17 +24,49 @@ namespace P_Asignación_de_Tareas.Controllers
         [HttpGet("GetComments")]
         public async Task<IActionResult> GetComments()
         {
-            var result = await _operations.GetComments();
+            await _operations.GetComments();
 
-            return Ok(result);
+            var AllComments = await _dbcontext.Comments.Select(a => new CommentsDto
+            {
+                idComment = a.idComment,
+                idTask = a.idTask,
+                descriptionCommet = a.descriptionCommet,
+                tasksDto = new TasksDto2
+                {
+                    idTask = a.idTask,
+                    nameTask = a.Tasks.nameTask,
+                    descriptionTask = a.Tasks.descriptionTask,
+                    dateTask = a.Tasks.dateTask,
+                    dateTaskCompletion = a.Tasks.dateTaskCompletion,
+                    state = a.Tasks.state
+                }
+            }).ToListAsync();
+
+            return Ok(AllComments);
         }
 
         [HttpGet("GetComment/{idComment}")]
         public async Task<IActionResult> GetComment(int idComment)
         {
-            var result = await _operations.GetComment(idComment);
+            await _operations.GetComment(idComment);
 
-            return Ok(result);
+            var Comment = await _dbcontext.Comments.Where(a => a.idComment == idComment).Select(a => new CommentsDto
+            {
+                idComment = a.idComment,
+                idTask = a.idTask,
+                descriptionCommet = a.descriptionCommet,
+                tasksDto = new TasksDto2
+                {
+                    idTask = a.idTask,
+                    nameTask = a.Tasks.nameTask,
+                    descriptionTask = a.Tasks.descriptionTask,
+                    dateTask = a.Tasks.dateTask,
+                    dateTaskCompletion = a.Tasks.dateTaskCompletion,
+                    state = a.Tasks.state
+                }
+            }).ToListAsync();
+
+            return Ok(Comment);
         }
 
         [HttpPost("CreateComment")]
