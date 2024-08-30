@@ -90,11 +90,11 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseHttpsRedirection();
 
-/*app.UseExceptionHandler(a => a.Run(async context =>
+app.UseExceptionHandler(a => a.Run(async context =>
 {
     var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>(); var exception = exceptionHandlerPathFeature.Error;
     context.Response.StatusCode = 500; await context.Response.WriteAsJsonAsync(new { Error = "An unexpected error occurred" });
-}));*/
+}));
     
     app.UseAuthentication();
 

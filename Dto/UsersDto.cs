@@ -7,6 +7,7 @@
         public string emailUser { get; set; }
         public string nameUser { get; set; }
         public int IdRol { get; set; }
-        public RolDto rolDto { get; set; } 
+        public ICollection<TasksDto2> tasksDto2 { get; set; } = new List<TasksDto2>();
+        public RolDto2 rolDto { get; set; } 
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using P_Asignación_de_Tareas.Dto;
 using P_Asignación_de_Tareas.Models;
 
@@ -30,12 +31,31 @@ namespace P_Asignación_de_Tareas.Operaciones
         {
             var tasks = await _dbcontext.Tasks.AddAsync(task);
 
+            var tasks1 = _dbcontext.Tasks.Where(a => a.idTask == a.idTask).FirstOrDefault();
+
+            if (task.dateTask == task.dateTaskCompletion)
+            {
+                task.state = "Terminada";
+            }
+
+            int maxTasksForUser = 5;
+
+            var userTaskAcount = await _dbcontext.Tasks.CountAsync(a => a.idUser == task.idUser);
+            if (userTaskAcount > maxTasksForUser)
+            {
+                
+                if (tasks1 != null)
+                {
+                    tasks1.idUser = tasks1.idUser;
+                }                
+            }
+
             await _dbcontext.SaveChangesAsync();
 
             return task;
         }
 
-        public async Task<bool> UpdateTask(TasksDto tasksDto)
+        public async Task<bool> UpdateTask(TasksDto2 tasksDto)
         {
             Tasks? tasks = await _dbcontext.Tasks.FindAsync(tasksDto.idTask);
 
@@ -46,7 +66,7 @@ namespace P_Asignación_de_Tareas.Operaciones
                 tasks.descriptionTask = tasksDto.descriptionTask;
                 tasks.nameTask = tasksDto.nameTask;    
                 tasks.idProyect = tasksDto.idProyect;
-                tasks.state = tasksDto.state;
+                tasks.state = tasksDto.state;              
 
                 await _dbcontext.SaveChangesAsync();
             }

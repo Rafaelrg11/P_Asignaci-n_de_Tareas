@@ -18,14 +18,14 @@ namespace P_Asignación_de_Tareas.Controllers
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {
-        public ApplicationDbcontext _dbcontext;
+        public readonly ApplicationDbcontext _context;
 
         private readonly string _secretkey;
 
-        public UsersOperations _operations;
-        public UsersController(IConfiguration configuration, UsersOperations operations, ApplicationDbcontext dbcontext)
+        public readonly UsersOperations _operations;
+        public UsersController(IConfiguration configuration, UsersOperations operations, ApplicationDbcontext context)
         {
-            _dbcontext = dbcontext;
+            _context = context;
             _operations = operations;
             _secretkey = configuration.GetSection("Jwt").GetSection("Key").ToString();
 
@@ -35,7 +35,7 @@ namespace P_Asignación_de_Tareas.Controllers
         [HttpPost("Login")]
         public IActionResult Login([FromBody] ValidationUserDto usersDto)
         {
-            var users = (from d in _dbcontext.Users
+            var users = (from d in _context.Users
                          where d.password == usersDto.password
                          && d.emailUser == usersDto.EmailUser 
                          select d).FirstOrDefault();
@@ -78,18 +78,29 @@ namespace P_Asignación_de_Tareas.Controllers
         {
             await _operations.GetUsers();
 
-            var allUsers = await _dbcontext.Users.Select(a => new UsersDto
+            var allUsers = await _context.Users.Select(a => new UsersDto
             {
                 idUser = a.idUser,
                 IdRol = a.IdRol,
                 nameUser = a.nameUser,
                 emailUser = a.emailUser,
                 password = a.password,
-                rolDto = new RolDto
+                rolDto = new RolDto2
                 {
                     IdRol = a.IdRol,
                     nombre = a.Rol.nombre
-                }
+                },
+                tasksDto2 = a.tasks.Select(a => new TasksDto2
+                {
+                    idTask = a.idTask,
+                    idProyect = a.idProyect,
+                    idUser = a.idUser,
+                    nameTask = a.nameTask,
+                    descriptionTask = a.descriptionTask,
+                    dateTask = a.dateTask,
+                    dateTaskCompletion = a.dateTaskCompletion,
+                    state = a.state
+                }).ToList()
             }).ToListAsync();
 
             return Ok(allUsers);
@@ -100,19 +111,30 @@ namespace P_Asignación_de_Tareas.Controllers
         {
             await _operations.GetUser(idUser);
 
-            var user = await _dbcontext.Users.Where(a => a.idUser == idUser).Select(a => new UsersDto
+            var user = await _context.Users.Where(a => a.idUser == idUser).Select(a => new UsersDto
             {
                 idUser = a.idUser,
                 IdRol = a.IdRol,
                 nameUser = a.nameUser,
                 emailUser = a.emailUser,
                 password = a.password,
-                rolDto = new RolDto
+                rolDto = new RolDto2
                 {
                     IdRol = a.IdRol,
                     nombre = a.Rol.nombre
-                }
-            }).ToListAsync();       
+                },
+                tasksDto2 = a.tasks.Select(a => new TasksDto2
+                {
+                    idTask = a.idTask,
+                    idProyect = a.idProyect,
+                    idUser = a.idUser,
+                    nameTask = a.nameTask,
+                    descriptionTask = a.descriptionTask,
+                    dateTask = a.dateTask,
+                    dateTaskCompletion = a.dateTaskCompletion,
+                    state = a.state
+                }).ToList()
+            }).ToListAsync();            
 
             return Ok(user);
         }
@@ -141,7 +163,7 @@ namespace P_Asignación_de_Tareas.Controllers
             return result;
         }
 
-        [HttpDelete("DeleteUser/{id}")]
+        [HttpDelete("DeleteUser/{idUser}")]
         public async Task<bool> DeleteUser(int idUser)
         {
             var result = await _operations.DeleteUser(idUser);

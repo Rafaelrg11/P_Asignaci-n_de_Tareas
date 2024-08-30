@@ -29,13 +29,13 @@ namespace P_Asignación_de_Tareas.Controllers
             {
                 IdRol = a.IdRol,
                 nombre = a.nombre,
-                Operacion = a.Operacion.Select(a => new OperacionesDto
+                Operacion = a.Operacion.Select(a => new OperacionesDto2
                 {
                     IdRol = a.IdRol,
                     IdOperaciones = a.IdOperaciones,
                     IdOperationRol = a.IdOperationRol
                 }).ToList(),
-                User = a.Users.Select(a => new UsersDto
+                User = a.Users.Select(a => new UserDto2
                 {
                     nameUser = a.nameUser,
                     emailUser = a.emailUser,
@@ -57,13 +57,13 @@ namespace P_Asignación_de_Tareas.Controllers
             {
                 IdRol = a.IdRol,
                 nombre = a.nombre,
-                Operacion = a.Operacion.Select(a => new OperacionesDto
+                Operacion = a.Operacion.Select(a => new OperacionesDto2
                 {
                     IdRol = a.IdRol,
                     IdOperaciones = a.IdOperaciones,
                     IdOperationRol = a.IdOperationRol
                 }).ToList(),
-                User = a.Users.Select(a => new UsersDto
+                User = a.Users.Select(a => new UserDto2
                 {
                     nameUser = a.nameUser,
                     emailUser = a.emailUser,

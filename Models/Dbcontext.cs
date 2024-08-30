@@ -87,6 +87,10 @@ namespace P_Asignación_de_Tareas.Models
                 .HasForeignKey(d => d.idProyect)
                 .HasConstraintName("FK_Tasks_Comments");
 
+                entity.HasOne(d => d.User).WithMany(d => d.tasks)
+                .HasForeignKey(d => d.idUser)
+                .HasConstraintName("FK_Tasks_User");
+
             });
 
             modelBuilder.Entity<Notifications>(entity => 

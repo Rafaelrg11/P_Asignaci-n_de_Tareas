@@ -31,21 +31,21 @@ namespace P_Asignación_de_Tareas.Controllers
                 nameNotification = a.nameNotification,
                 idNotification = a.idNotification,
                 idUser = a.idUSer,
-                UserDto = new UsersDto
+                UserDto = new UserDto2
                 {
                     idUser = a.User.idUser,
                     IdRol = a.User.IdRol,
                     emailUser = a.User.emailUser,
                     nameUser = a.User.nameUser,
-                    password = a.User.password
-                }
+                    password = a.User.password,                   
+                }               
             }).ToListAsync();
 
             return Ok(allNotifications);
         }
 
         [HttpGet("GetNotification/{idNotifi}")]
-        public async Task<IActionResult> GetNotifications(int idNotifi)
+        public async Task<IActionResult> GetNotification(int idNotifi)
         {
             await _operations.GetNotification(idNotifi);
 
@@ -55,7 +55,7 @@ namespace P_Asignación_de_Tareas.Controllers
                 nameNotification = a.nameNotification,
                 idNotification = a.idNotification,
                 idUser = a.idUSer,
-                UserDto = new UsersDto
+                UserDto = new UserDto2
                 {
                     idUser = a.User.idUser,
                     IdRol = a.User.IdRol,

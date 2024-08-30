@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using P_Asignación_de_Tareas.Dto;
 using P_Asignación_de_Tareas.Models;
 using P_Asignación_de_Tareas.Operaciones;
+using System.Threading.Tasks;
 
 namespace P_Asignación_de_Tareas.Controllers
 {
@@ -29,12 +30,21 @@ namespace P_Asignación_de_Tareas.Controllers
             {
                 idProyect = a.idProyect,
                 idTask = a.idTask,
+                idUser = a.idUser,
                 nameTask = a.nameTask,
                 descriptionTask = a.descriptionTask,
                 dateTask = a.dateTask,
                 dateTaskCompletion = a.dateTaskCompletion,
                 state = a.state,
-                proyects = new ProyectsDto
+                User = new UsersCustomDto
+                {
+                    idUser = a.User.idUser,
+                    IdRol = a.User.IdRol,
+                    nameUser = a.User.nameUser,
+                    emailUser = a.User.emailUser,
+                    password = a.User.password
+                },
+                proyects = new ProyectDto2
                 {
                     idProyect = a.idProyect,
                     nameProyect = a.Proyects.nameProyect
@@ -43,12 +53,25 @@ namespace P_Asignación_de_Tareas.Controllers
                 {
                     idComment = a.idComment,
                     idTask = a.idTask,
-                    descriptionCommet = a.descriptionCommet
+                    descriptionCommet = a.descriptionCommet,
+                    tasksDto = new TasksDto2
+                    {
+                        idTask = a.idTask,
+                        idProyect = a.Tasks.idProyect,
+                        idUser = a.Tasks.idUser,
+                        nameTask = a.Tasks.nameTask,
+                        descriptionTask = a.Tasks.descriptionTask,
+                        dateTask = a.Tasks.dateTask,
+                        dateTaskCompletion = a.Tasks.dateTaskCompletion,
+                        state = a.Tasks.state
+                    }
                 }).ToList()
-            }).ToListAsync();
+            }).ToListAsync();           
 
             return Ok(allTasks);
         }
+        
+       
 
         [HttpGet("GetTask/{idTask}")]
         public async Task<IActionResult> GetTask(int idTask)
@@ -59,12 +82,21 @@ namespace P_Asignación_de_Tareas.Controllers
             {
                 idProyect = a.idProyect,
                 idTask = a.idTask,
+                idUser = a.idUser,
                 nameTask = a.nameTask,
                 descriptionTask = a.descriptionTask,
                 dateTask = a.dateTask,
                 dateTaskCompletion = a.dateTaskCompletion,
                 state = a.state,
-                proyects = new ProyectsDto
+                User = new UsersCustomDto
+                {
+                    idUser = a.User.idUser,
+                    IdRol = a.User.IdRol,
+                    nameUser = a.User.nameUser,
+                    emailUser = a.User.emailUser,
+                    password = a.User.password
+                },
+                proyects = new ProyectDto2
                 {
                     idProyect = a.idProyect,
                     nameProyect = a.Proyects.nameProyect
@@ -73,21 +105,35 @@ namespace P_Asignación_de_Tareas.Controllers
                 {
                     idComment = a.idComment,
                     idTask = a.idTask,
-                    descriptionCommet = a.descriptionCommet
+                    descriptionCommet = a.descriptionCommet,
+                    tasksDto = new TasksDto2
+                    {
+                        idTask = a.idTask,
+                        idProyect = a.Tasks.idProyect,
+                        idUser = a.Tasks.idUser,
+                        nameTask = a.Tasks.nameTask,
+                        descriptionTask = a.Tasks.descriptionTask,
+                        dateTask = a.Tasks.dateTask,
+                        dateTaskCompletion = a.Tasks.dateTaskCompletion,
+                        state = a.Tasks.state
+                    },
+                    
                 }).ToList()
             }).ToListAsync();
 
-            /*if (result.dateTask == result.dateTaskCompletion)
+            var tasks = _dbcontext.Tasks.Where(a => a.idTask == idTask).FirstOrDefault();
+
+            if (tasks.dateTask == tasks.dateTaskCompletion)
             {
-                result.state = "Terminada";
-            }*/
+                tasks.state = "Terminada";
+            }
 
             return Ok(task);
         }
 
         [HttpPost("CreateTask")]
-        public async Task<IActionResult> CreateTask(TasksDto tasksDto)
-        {
+        public async Task<IActionResult> CreateTask(TasksDto2 tasksDto)
+        {         
             Tasks task = new Tasks()
             {
                 descriptionTask = tasksDto.descriptionTask,
@@ -96,6 +142,7 @@ namespace P_Asignación_de_Tareas.Controllers
                 dateTaskCompletion = tasksDto.dateTaskCompletion,
                 idProyect = tasksDto.idProyect,     
                 state = tasksDto.state,
+                idUser = tasksDto.idUser
             };           
 
             var result = await _operations.CreateTask(task);
@@ -104,7 +151,7 @@ namespace P_Asignación_de_Tareas.Controllers
         }
 
         [HttpPut("UpdateTask/{idTask}")]
-        public async Task<bool> UpdateTask(TasksDto tasksDto)
+        public async Task<bool> UpdateTask(TasksDto2 tasksDto)
         {
             var result = await _operations.UpdateTask(tasksDto);
 
@@ -112,11 +159,11 @@ namespace P_Asignación_de_Tareas.Controllers
         }
 
         [HttpDelete("DeleteTask/{idTask}")]
-        public async Task<bool> DeleteTask(int idTask)
+        public async Task<IActionResult> DeleteTask(int idTask)
         {
             var result = await _operations.DeleteTask(idTask);
 
-            return result;
+            return Ok("Tarea Eliminada con exito");
         }
     }
 }

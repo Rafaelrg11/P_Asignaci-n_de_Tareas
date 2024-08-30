@@ -31,12 +31,12 @@ namespace P_Asignación_de_Tareas.Controllers
                 IdOperationsRol = a.IdOperationsRol,
                 IdModulo = a.IdModulo,
                 NameOperationRol = a.NameOperationRol,
-                module = new ModuleDto
+                module = new ModuleDto2
                 {
                     NameMod = a.Module.NameMod,
                     IdMod = a.IdModulo
                 },
-                Operaciones = a.Operaciones.Select(a => new OperacionesDto
+                Operaciones = a.Operaciones.Select(a => new OperacionesDto2
                 {
                     IdOperaciones = a.IdOperaciones,
                     IdOperationRol = a.IdOperationRol,
@@ -57,12 +57,12 @@ namespace P_Asignación_de_Tareas.Controllers
                 IdOperationsRol = a.IdOperationsRol,
                 IdModulo = a.IdModulo,
                 NameOperationRol = a.NameOperationRol,
-                module = new ModuleDto
+                module = new ModuleDto2
                 {
                     NameMod = a.Module.NameMod,
                     IdMod = a.IdModulo
                 },
-                Operaciones = a.Operaciones.Select(a => new OperacionesDto
+                Operaciones = a.Operaciones.Select(a => new OperacionesDto2
                 {
                     IdOperaciones = a.IdOperaciones,
                     IdOperationRol = a.IdOperationRol,

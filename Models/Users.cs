@@ -13,6 +13,7 @@ namespace P_Asignación_de_Tareas.Models
         public string? nameUser { get; set; }
         public int IdRol { get; set; }
         public virtual Rol Rol { get; set; }
+        public virtual ICollection<Tasks> tasks { get; set; } = new List<Tasks>();
         public virtual ICollection<Notifications> Notification { get; set; } = new List<Notifications>();
         public virtual ICollection<AuxiliarT> AuxiliarT { get; set; } = new List<AuxiliarT>();
     }

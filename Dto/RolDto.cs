@@ -6,8 +6,8 @@ namespace P_Asignación_de_Tareas.Dto
     {
         public int IdRol { get; set; }
         public string nombre { get; set; }
-        public virtual ICollection<UsersDto> User { get; set; } = new List<UsersDto>();
-        public virtual ICollection<OperacionesDto> Operacion { get; set; } = new List<OperacionesDto>();
+        public virtual ICollection<UserDto2> User { get; set; } = new List<UserDto2>();
+        public virtual ICollection<OperacionesDto2> Operacion { get; set; } = new List<OperacionesDto2>();
 
     }
 }

@@ -29,14 +29,16 @@ namespace P_Asignación_de_Tareas.Controllers
             {
                 idProyect = a.idProyect,
                 nameProyect = a.nameProyect,
-                task = a.Tasks.Select(a => new TasksDto
+                task = a.Tasks.Select(a => new TasksDto2
                 {
                     idProyect = a.idProyect,
                     idTask = a.idTask,
+                    idUser = a.idUser,
                     nameTask = a.nameTask,
                     descriptionTask = a.descriptionTask,
                     dateTask = a.dateTask,
-                    dateTaskCompletion = a.dateTaskCompletion
+                    dateTaskCompletion = a.dateTaskCompletion,
+                    state = a.state
                 }).ToList(),
                 Auxiliar = a.AuxiliarT.Select(a => new AuxiliarTDto
                 {
@@ -58,7 +60,7 @@ namespace P_Asignación_de_Tareas.Controllers
             {
                 idProyect = a.idProyect,
                 nameProyect = a.nameProyect,
-                task = a.Tasks.Select(a => new TasksDto
+                task = a.Tasks.Select(a => new TasksDto2
                 {
                     idProyect = a.idProyect,
                     idTask = a.idTask,

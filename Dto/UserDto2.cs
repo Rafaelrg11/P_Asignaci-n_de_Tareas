@@ -1,6 +1,6 @@
 ﻿namespace P_Asignación_de_Tareas.Dto
 {
-    public class UsersCustomDto
+    public class UserDto2
     {
         public int idUser { get; set; }
         public int password { get; set; }
